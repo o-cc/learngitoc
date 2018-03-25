@@ -4,3 +4,6 @@
  now I will change this note,order to text this git order:"git status";
  hello I come back!but my name is changes,you can call cc;
  think you!
+ 
+ text 2
+ work area exercise
