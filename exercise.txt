@@ -1,0 +1,2 @@
+﻿frist:
+text 2 for workarea in order to exercise git order 
