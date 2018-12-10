@@ -662,45 +662,46 @@
                                     $(this).css("color", "red").siblings("p").css("color","#fff")
                                 });
 
+
+                                //加载第一页
+                                var tempRow     = "";
+                                for ( let i = 0; i < wrapArr[0].length; i++ ) {
+
+                                    tempRow += "<div  data=" +wrapArr[0][i]["id"]+ " class='record-row'>" +
+                                        "       <p>"+ wrapArr[0][ i ][ "flag" ] +" </p>" +
+                                        "       <p> "+wrapArr[0][i]["title"]+" </p>" +
+                                        "       <p>"+wrapArr[0][i]["id"]+" </p>" +
+                                        "   </div>";
+                                }
+                                let tempTitle = '<div class="record-row"><p>序号</p><p>会议标题</p><p>会议ID</p></div>';
+                                $(".alert-record-center").html( tempTitle + tempRow );
+
+                                //点击页数  耦合有点严重 不应该在这里定义事件同时使用wrapArr
+                                $(".record-page-footer>p").click(function () {
+                                    var pageData = wrapArr[ $(this).attr("data") ]; //点击页的数据
+                                    //clearRow
+                                    $(".alert-record-center").html();
+                                    //根据索引 替换
+
+                                    var tempRow = "";
+                                    for ( var i = 0; i < pageData.length; i++ ) {
+
+                                        tempRow += "<div  data=" +pageData[i]["id"]+ " class='record-row'>" +
+                                            "       <p>会议序号: "+ pageData[ i ][ "flag" ] +" </p>" +
+                                            "       <p>会议ID: "+pageData[i]["id"]+" </p>" +
+                                            "       <p> "+pageData[i]["title"]+" </p>" +
+                                            "   </div>";
+                                    }
+                                    $(".alert-record-center").html( tempRow );
+
+                                    //如果下一页了，这个就失效 需要重新定义
+                                    clickRow( dataList );
+                                });
+
                             }else{
                                 tempDataP = "<span style='white-space: nowrap;color:#fff;'>无数据</span>";
                                 $( ".record-page-footer" ).html( tempDataP );
                             }
-
-                            //加载第一页
-                            var tempRow     = "";
-                            for ( let i = 0; i < wrapArr[0].length; i++ ) {
-
-                                tempRow += "<div  data=" +wrapArr[0][i]["id"]+ " class='record-row'>" +
-                                    "       <p>"+ wrapArr[0][ i ][ "flag" ] +" </p>" +
-                                    "       <p> "+wrapArr[0][i]["title"]+" </p>" +
-                                    "       <p>"+wrapArr[0][i]["id"]+" </p>" +
-                                    "   </div>";
-                            }
-                            let tempTitle = '<div class="record-row"><p>序号</p><p>会议标题</p><p>会议ID</p></div>';
-                            $(".alert-record-center").html( tempTitle + tempRow );
-
-                            //点击页数  耦合有点严重 不应该在这里定义事件同时使用wrapArr
-                            $(".record-page-footer>p").click(function () {
-                                var pageData = wrapArr[ $(this).attr("data") ]; //点击页的数据
-                                //clearRow
-                                $(".alert-record-center").html();
-                                //根据索引 替换
-
-                                var tempRow = "";
-                                for ( var i = 0; i < pageData.length; i++ ) {
-
-                                    tempRow += "<div  data=" +pageData[i]["id"]+ " class='record-row'>" +
-                                        "       <p>会议序号: "+ pageData[ i ][ "flag" ] +" </p>" +
-                                        "       <p>会议ID: "+pageData[i]["id"]+" </p>" +
-                                        "       <p> "+pageData[i]["title"]+" </p>" +
-                                        "   </div>";
-                                }
-                                $(".alert-record-center").html( tempRow );
-
-                                //如果下一页了，这个就失效 需要重新定义
-                                clickRow( dataList );
-                            });
 
                         });
                         callback (true);

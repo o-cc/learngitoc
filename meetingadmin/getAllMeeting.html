@@ -70,7 +70,7 @@
 
         }
 
-        .alert-info-mask, .alert-module-mask {
+        .alert-info-mask, .alert-module-mask, .alert-module-info-mask {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -87,6 +87,10 @@
             align-items: center;
             font-size: 1.3em;
             z-index: 2;
+        }
+
+        .alert-module-info-center {
+            justify-content: flex-start;
         }
 
         .alert-center > div {
@@ -116,7 +120,7 @@
 
         .alert-module-center > div {
             width: 100%;
-            height: 2.5em;
+            height: 3em;
             line-height: 2.5em;
             display: flex;
             background-color: #ccc;
@@ -141,7 +145,7 @@
 
         .alert-module-info-center > div {
             width: 100%;
-            height: 3em;
+            height: 2.5em;
             line-height: 2.5em;
             display: flex;
             background-color: #ccc;
@@ -381,33 +385,33 @@
 </div>
 
 
-<div class="alert-module-info ">
+<div class="alert-module-info hide">
     <div class="alert-module-info-center" style="width: 90%;">
-        <div>
-            <div>模块序号</div>
-            <div>模块名称</div>
-            <div>模块地址</div>
-            <div>模块图标</div>
-            <div></div>
-        </div>
-        <div>
-            <div><input type="text"></div>
-            <div><input type="text"></div>
-            <div><input type="text"></div>
-            <div style="flex-direction: column;">
-                <a style="height: 2em;">sdfsadfasdfsd.jpg</a>
-                <input type="file" accept="image/*"></div>
-            <div>
-                <button class="change-module">修改</button>
-                <button class="delete-module">删除</button>
-            </div>
-        </div>
+        <!--<div>-->
+            <!--<div>模块序号</div>-->
+            <!--<div>模块名称</div>-->
+            <!--<div>模块地址</div>-->
+            <!--<div>模块图标</div>-->
+            <!--<div></div>-->
+        <!--</div>-->
+        <!--<div>-->
+            <!--<div><input type="text"></div>-->
+            <!--<div><input type="text"></div>-->
+            <!--<div><input type="text"></div>-->
+            <!--<div style="flex-direction: column;">-->
+                <!--<a style="height: 2em;">sdfsadfasdfsd.jpg</a>-->
+                <!--<input type="file" accept="image/*"></div>-->
+            <!--<div>-->
+                <!--<button class="change-module">修改</button>-->
+                <!--<button class="delete-module">删除</button>-->
+            <!--</div>-->
+        <!--</div>-->
 
         <div>
 
         </div>
     </div>
-    <div class="alert-module-mask" ></div>
+    <div class="alert-module-info-mask" ></div>
 </div>
 
 <script src="scripts/checkToken.js"></script>
@@ -456,6 +460,7 @@
             $(".alert-info").addClass( "hide" );
 
         })
+
         for (var i = 0; i< all.length; i++ ){
             all[i].blur(function () {
 
@@ -609,8 +614,153 @@
         })
         //显示模块
         $(".btn2").click(function () {
+            $(".alert-module-info").removeClass( "hide" );
+
+            function getModuleInfo( callback ) {
+                $.ajax({
+                    url: globalUrl.globalUrl + "modules/" + meetingId,
+                    method: "GET",
+                    success: function ( data ) {
+
+                        if( data[ "errno" ] !== "0" ){
+                            alert( data[ "errmsg" ] );
+                            callback( false );
+                        }
+
+                        let moduleList = data[ "module_list" ];
+                        let temp = ' <div>\n' +
+                            '            <div>模块序号</div>\n' +
+                            '            <div>模块名称</div>\n' +
+                            '            <div>模块地址</div>\n' +
+                            '            <div>模块图标</div>\n' +
+                            '            <div></div>\n' +
+                            '        </div>';
+
+                        for ( let i = 0; i < moduleList.length; i++ ) {
+                            let imageName = moduleList[ i ][ "image" ].slice(moduleList[ i ][ "image" ].lastIndexOf( "/" ) + 1 );
+
+                            if ( imageName.length > 17 ) {
+                                imageName = imageName.slice( 0, 9 ) + "..." + imageName.slice( imageName.lastIndexOf( "." ) - 5 );
+                            }
+
+                            //根据sort顺序排
+                            temp += '<div>\n' +
+                                '            <div><input class="numb" type="number" value=' + moduleList[ i ][ "sort" ] + '></div>\n' +
+                                '            <div><input type="text" value=' + moduleList[ i ][ "title" ] + '></div>\n' +
+                                '            <div><input type="text" value=' + moduleList[ i ][ "next_href" ] + '></div>\n' +
+                                '            <div style="flex-direction: column;">\n' +
+                                '                <a target="_blank" style="height: 2em;font-size:.7em;margin-bottom:0.5em;" href=' +moduleList[ i ][ "image" ] + '> ' + imageName + ' </a>\n' +
+                                '                <input  style="font-size: .5em;" type="file" accept="image/*" class="module-pic"></div>\n' +
+                                '            <div>\n' +
+                                '                <button class="change-module" data=' + moduleList[ i ][ "module_id" ] + '>修改</button>\n' +
+                                '                <button class="delete-module" data=' + moduleList[ i ][ "module_id" ] + '>删除</button>\n' +
+                                '            </div>\n' +
+                                '        </div>';
+                        }
+
+                        //temp += '<div class="module-footer" style="display: flex;justify-content: center;">' +
+                        //
+                        //    '</div>';
+
+                        $( ".alert-module-info-center" ).html( temp );
+                        callback( true );
+                    },
+                    error: function (err) {
+                        console.log( err );
+                    }
+                })
+
+            }
+
+            getModuleInfo(function (tf) {
+                console.log( tf );
+                if( !tf ){
+                    return;
+                }
+
+                var moduleChangeBase64 = "";
+                $( ".module-pic" ).change( function () {
+
+                    lrz( this.files[ 0 ], {
+                        //width: 300 //设置压缩参数
+                    } ).then( function ( rst ) {
+                        /* 处理成功后执行 */
+                        moduleChangeBase64 = rst.base64;
+
+                    } ).catch( function ( err ) {
+                        /* 处理失败后执行 */
+                        console.log( err );
+                    } )
+
+                } )
+
+                //修改该模块
+                $(".change-module").click(function () {
+                    console.log( 1 );
+                    let self = $(this);
+                    $.ajax({
+                        url: globalUrl.globalUrl + "admin/modules/" + self.attr("data"),
+                        method: "PUT",
+                        contentType: "application/json",
+                        headers    : {
+                            "Authorization": window.sessionStorage.getItem( "token" )
+                        },
+                        data: JSON.stringify({
+                            title: self.parent().siblings("div").eq(1).children().eq(0).val(),
+                            sort: self.parent().siblings("div").eq(0).children().eq(0).val(),
+                            next_href: self.parent().siblings("div").eq(2).children().eq(0).val(),
+                            image: moduleChangeBase64
+                        }),
+                        success: function ( data ) {
+                            if( data["errno"] !== "0" ){
+                                alert( data["errmsg"] );
+                                return;
+                            }
+                            alert( data["errmsg"] );
+                            $(".alert-module-info").addClass( "hide" );
+
+                        },
+                        error: function (err) {
+                            console.log( err );
+                        }
+                    })
+                });
+                //删除该模块
+                $(".delete-module").click(function () {
+                    let self = $(this);
+                    $.ajax({
+                        url: globalUrl.globalUrl + "admin/modules/" + self.attr("data"),
+                        method: "delete",
+                        contentType: "application/json",
+                        headers    : {
+                            "Authorization": window.sessionStorage.getItem( "token" )
+                        },
+                        success: function ( data ) {
+                            if( data["errno"] !== "0" ){
+                                alert( data["errmsg"] );
+                                return;
+                            }
+                            alert( data["errmsg"] );
+                            $(".alert-module-info").addClass( "hide" );
+
+                        },
+                        error: function (err) {
+                            console.log( err );
+                        }
+                    })
+                });
+
+                $(".numb").blur(function () {
+
+                    if( $('.numb').val() < 0 ){
+                        $('.numb').val(1);
+                    }
+
+                })
+            })
 
         });
+
         //显示添加模块
         $(".btn3").click(function () {
             $(".alert-module").removeClass("hide");
@@ -630,7 +780,7 @@
             }
 
             $.ajax({
-                url: globalUrl.globalUrl + "modules/" + meetingId,
+                url: globalUrl.globalUrl + "admin/modules/" + meetingId + "/meeting",
                 method: "POST",
                 contentType: "application/json",
                 headers    : {
@@ -661,6 +811,12 @@
 
                     alert(data["errmsg"]);
                     $(".alert-module").addClass( "hide" );
+                    $("#module-name").val("");
+                    $("#module-link").val("");
+                    $("#module-sort").val("");
+                    $("#module-pic").val("");
+                    moduleBase64 = "";
+
                 },
                 error: function (err ) {
                     alert( "添加模块无法链接服务器" );
@@ -674,6 +830,11 @@
         $(".alert-module-mask").click(function () {
 
             $(".alert-module").addClass( "hide" );
+
+        })
+        $(".alert-module-info-mask").click(function () {
+
+            $(".alert-module-info").addClass( "hide" );
 
         })
 
