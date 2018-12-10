@@ -34,7 +34,7 @@ console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
     var editor1 = new E('#div1', '#div2');
     editor1.create();
     document.getElementById("upload").onclick = function (){
-        editor1.txt.html();
+       
             $.ajax({
                 url: globalUrl.globalUrl + "admin/modules/" + loadPageVar("moduleId") + "/meeting" + loadPageVar("meetingId"),
                 method: "POST",
@@ -43,11 +43,7 @@ console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
                     "Authorization": window.sessionStorage.getItem( "token" )
                 },
                 data: JSON.stringify({
-                    "image" : moduleBase64,
-                    "title" : $("#module-name").val().trim(),
-                    "next_href": $("#module-link").val().trim(),
-                    "meeting_id": meetingId,
-                    "sort": $("#module-sort").val(),
+                   "content":  editor1.txt.html()
                 }),
                 success: function ( data ) {
                     /*
@@ -59,6 +55,7 @@ console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
                         'meeting_id': 6
                     }
                     * */
+                    console.log( data );
                     if( data["errno"]  !== "0" ){
 
                         alert(data["errmsg"]);
