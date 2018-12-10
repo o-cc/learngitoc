@@ -53,7 +53,7 @@ $(function () {
 
         //获取九宫格背景
         $.ajax({
-            url: globalUrl.globalUrl + "meetings/" + loadPageVar( "meetingId" ),
+            url: globalUrl.globalUrl + "modules/" + loadPageVar( "meetingId" ),
             method: "GET",
             success: function ( data ) {
 
@@ -63,14 +63,19 @@ $(function () {
                 }
 
                 //生成九宫格
-                var dataList = data[ "data" ];
+                var dataList = data[ "module_list" ];
+
                 for ( var i = 0; i < dataList.length; i++ ) {
-                    var  temp = '<a href='+ dataList[ "url" ]+"?meetingId="+ loadPageVar( "meetingId") +'>\n' +
-                        '           <img src=' +dataList[ "icon" ]+ ' class="index-icon" alt="">\n' +
-                        '           <p>' +dataList[ "icon_name" ] +'</p>\n' +
+                    var  temp = '<a href='+ dataList[i][ "next_href" ]+"?meetingId="+ loadPageVar( "meetingId") +'>\n' +
+                        '           <img src=' +dataList[i][ "image" ]+ ' class="index-icon" alt="">\n' +
+                        '           <p style="font-size: 1.3rem;margin-top: 0.5rem;">' +dataList[i][ "title" ] +'</p>\n' +
                         '        </a>';
 
                     $(".bomBtn").before( temp );
+                }
+
+                if( dataList.length%3 !== 0 ){
+                    $(".bomBtn").before( '<a></a>' );
                 }
 
             },

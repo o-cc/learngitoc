@@ -40,7 +40,7 @@ $(function () {
                     $.alert("获取信息不成功");
                     return;
                 }
-
+                console.log( data );
                 /*
                 * {
                     "errno": "0",
