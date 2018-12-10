@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>wangEditor</title>
+    <style type="text/css">
+        .toolbar {
+            border: 1px solid #ccc;
+        }
+        .text {
+            border: 1px solid #ccc;
+            min-height: 400px;
+        }
+    </style>
+</head>
+<body>
+    <div id="div1" class="toolbar">
+    </div>
+    <div style="padding: 5px 0; color: #ccc"></div>
+    <div id="div2" class="text"> 
+        <p>请输入内容</p>
+    </div>
+    <button id="upload">获取数据</button>
+
+<script src="./scripts/wangEditor.min.js"></script>
+<script src="./scripts/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+    var E = window.wangEditor
+    var editor1 = new E('#div1', '#div2');
+    editor1.create();
+    document.getElementById("upload").onclick = function (){
+        editor1.txt.html();
+
+        
+    }
+
+</script>
+</body>
+</html>
