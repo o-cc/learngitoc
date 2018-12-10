@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>个人中心</title>
+    <link rel="stylesheet" href="css/weui.min.css">
+    <link rel="stylesheet" href="css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/globalCss.css">
+    <link rel="stylesheet" href="css/personInfo.css">
+</head>
+<body>
+<div class="contain">
+<header>
+    <div class="top-header">
+        <div>
+            <div class="center-header">
+                <div class="left-image">
+                    <img src="" class="header-person-img" alt="">
+                </div>
+                <div class="header-name">
+                    <p class="user-name" style="font-size:1.5rem;">
+                        <span id="user-name"></span>
+                        <img src="" class="erweima" alt="">
+                    </p>
+                    <p class="company"></p>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div style= "margin-top:0;"class="weui-cells header-btns">
+            <a class="weui-cell weui-cell_access modify">
+                <div class="weui-cell__bd">
+                    <p>信息修改</p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" id="serviceInfo">
+                <div class="weui-cell__bd">
+                    <p>我要参加</p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" id="record">
+                <div class="weui-cell__bd">
+                    <p>参加记录</p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+            <a class="weui-cell weui-cell_access" id="check-psw">
+                <div class="weui-cell__bd">
+                    <p>密码修改</p>
+                </div>
+                <div class="weui-cell__ft">
+                </div>
+            </a>
+    </div>
+
+</header>
+
+<section class="person-record">
+
+    <div class="weui-cells clear-before-after" style="background: none">
+        <div class="weui-cell">
+           <p>我的记录</p>
+        </div>
+    </div>
+
+
+</section>
+
+<div style="margin-top: 2rem;">
+    <a style="background: #0050ffc9; color: #fff;" class="weui-btn weui-btn_default go_back">返回</a>
+
+</div>
+<div style="height: 1.5rem; overflow: hidden;">
+    <a style="opacity: 0;"  class="weui-btn weui-btn_default"> 回到首页 </a>
+
+</div>
+
+<div class="weui-mask check-pwd">
+    <div class="check-pwd-center">
+        <div class="check-pwd-head">
+            <span style="padding-left: 1.5rem;">修改密码</span>
+        </div>
+        <div class="check-pwd-cont">
+            <p>原密码</p>
+            <input type="password" class="check-pwd-ipt old-pwd">
+            <p>新密码</p>
+            <input type="password"  class="check-pwd-ipt new-pwd">
+            <p>确认密码</p>
+            <input type="password"  class="check-pwd-ipt again-pwd">
+        </div>
+        <div class="check-pwd-footer">
+            <div><a href="javascript:;" id="confirm-pwd" style="margin-top: 2rem;width: 80%;" class="weui-btn weui-btn_primary">确定</a></div>
+            <div><a href="javascript:;" id="cancel-pwd" style="margin-top: 2rem;width: 80%;color: #000000; background: #fff;border:1px solid #cccccc;" class="weui-btn weui-btn_primary">取消</a></div>
+        </div>
+    </div>
+</div>
+
+<!--二维码可能会出问题 要控制宽高才合理-->
+<div class="weui-mask show-erweima">
+    <img src="" alt="">
+</div>
+
+<div style="padding: 1rem 0;" class="weui-mask show-record">
+    <!--显示所有的记录-->
+    <!--<div>-->
+        <!--<div class="weui-cells">-->
+            <!--<div class="weui-cell">-->
+                <!--<div class="weui-cell__bd">-->
+                    <!--<p class="section-time" style="color:#999;">2018-10-29 00:00</p>-->
+                <!--</div>-->
+                <!--<div class="weui-cell__ft" style="color: #000;">广东财经大学华商学院第二次会议</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+
+
+</div>
+
+<div class="hide detail-info">
+    <div class="header-title">
+        <p id="detail-title">会议介绍</p>
+    </div>
+
+    <div class="active-info">
+        <div class="active-center">
+            <p style="padding: 1rem;margin: 0 auto;" id="introduce"></p>
+        </div>
+
+        <div class="bottom-btns">
+            <div><a class="weui-btn weui-btn_warn pay">立即付款</a></div>
+        </div>
+    </div>
+</div>
+
+</div>
+
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-weui.min.js"></script>
+<script src="js/globalUrl.js"></script>
+<script src="js/checkToken.js"></script>
+<script src="js/personInfo.js"></script>
+
+</body>
+</html>

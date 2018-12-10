@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>登录</title>
+    <link rel="stylesheet" href="css/weui.min.css">
+    <link rel="stylesheet" href="css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/globalCss.css">
+    <link rel="stylesheet" href="css/login.css">
+</head>
+<body>
+
+<header>
+    <img id="head_img" src="./image/index/publicImg.jpg" alt="">
+
+    <div class="header-title">
+        <!--<p><a href="./index.html">回到首页</a></p>-->
+    </div>
+
+</header>
+
+<div class="login">
+    <div class="login-center">
+        <div class="login-item login-title">个人用户登录</div>
+        <div class="login-item login-ipt">
+            <div class="weui-cell__bd">
+                <input class="weui-input login-input" id="user-num" type="text" placeholder="请输入手机或身份证号码">
+            </div>
+        </div>
+        <div class="login-item login-ipt" style="border-top:0;">
+            <div class="weui-cell__bd ">
+                <input  class="weui-input login-input" id="user-psw" type="password" placeholder="请输入密码">
+            </div>
+        </div>
+        <div class="login-item" style="height: 2.5rem;">
+            <p id="error-tip"></p>
+        </div>
+        <div class="login-item">
+            <a id="login" style="background: #0050ffc9" class="weui-btn weui-btn_primary">登录</a>
+        </div>
+        <div class="login-item last-btns">
+            <div> <a class="weui-btn weui-btn_primary register">新用户注册</a></div>
+            <!--<div> <a href="javascript:;" class="weui-btn weui-btn_default">忘记密码?</a></div>-->
+        </div>
+    </div>
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-weui.min.js"></script>
+<script src="js/globalUrl.js"></script>
+<script src="js/login.js"></script>
+</body>
+</html>

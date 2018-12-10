@@ -1,0 +1,580 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="scripts/jquery-weui.min.css">
+    <link rel="stylesheet" href="scripts/weui.min.css">
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center {
+            width: 100%;
+            height: 100%;
+            /*align-items: center;*/
+        }
+
+        .center > div {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .title {
+            font-size: 1.5em;
+
+        }
+
+        .tab {
+            width: 100%;
+            font-size: 1.3em;
+            margin-left: 10px;
+            border: 1px solid #1A5CC6;
+        }
+
+        .tab tr:first-child {
+            color: #000;
+        }
+
+        .tab tr:nth-child(2n-1) {
+            background-color: #aaa;
+        }
+
+        .tab tr:nth-child(2n) {
+            background-color: #ccc;
+        }
+
+        .tab td {
+            min-width: 80px;
+            height: 3em;
+            text-align: center;
+        }
+
+        .alert-info {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quit {
+            position: absolute;
+            top: 0;
+            right: 3%;
+            color: #FFFFFF;
+            font-size: 3em;
+            cursor: pointer;
+        }
+
+        .alert-center-mask {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .alert-center {
+            width: 80%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 1.3em;
+            z-index: 2;
+        }
+
+        .alert-center > div {
+            width: 100%;
+            height: 2.5em;
+            line-height: 2.5em;
+            display: flex;
+            background-color: #ccc;
+        }
+
+        .alert-center > div > div {
+            flex: 1;
+            border: 1px solid #fff;
+            padding-left: 1em;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+        }
+
+        .alert-center input {
+            height: 2em;
+            width: 70%;
+        }
+
+
+        .click-tr {
+            cursor: pointer;
+        }
+
+        .btn, .btn1 {
+            width: 50%;
+            height: 100%;
+            font-size: 1em;
+            color: #fff;
+            background-color: #ff6700;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-footer p{
+            width: 40px;
+            height: 40px;
+            background-color: #759fcc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="center">
+    <div id="contain">
+        <p class="title">查看会议信息:</p>
+        <table class="tab" id="tab">
+            <tr>
+                <td>序号</td>
+                <td>酒店名称</td>
+                <td>酒店地址</td>
+                <td>酒店价格</td>
+            </tr>
+
+        </table>
+        <div class="page-footer">
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="alert-info hide">
+    <!--<div class="quit">×</div>-->
+    <div class="alert-center">
+        <div>
+            <div>
+                <span>酒店名称:</span>
+                <input type="text" id="title">
+            </div>
+            <div>
+                <span>酒店价格:</span>
+                <input type="number" min="1" id="price">
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <span>酒店星级:</span>
+                <input type="number" min="0" max="5" id="standard">
+            </div>
+            <div>
+                <span>酒店地址:</span>
+                <input type="text" id="address">
+            </div>
+        </div>
+
+        <div>
+            <div>剩余总数:
+                <input type="number" min="0" id="total">
+            </div>
+            <div>
+
+            </div>
+        </div>
+
+        <div>
+            <div>
+
+            </div>
+            <div style="display: flex;">
+                <button class="btn">删除酒店</button>
+                <button class="btn1">确认修改</button>
+            </div>
+        </div>
+    </div>
+    <div class="alert-center-mask"></div>
+</div>
+<script src="scripts/jquery/jquery.min.js"></script>
+<script src="scripts/jquery-weui.min.js"></script>
+<script src="scripts/checkToken.js"></script>
+<script src="scripts/globalUrl.js"></script>
+
+<script>
+    $( function () {
+
+        var userList = {};
+        var hotelId   = undefined;
+
+        /*
+         * [
+         *   [
+         *       {},
+         *       {},
+         *   ],
+         *   [
+         *       {},
+         *       {},
+         *   ]
+         * ]
+         * */
+
+        function getHotels ( callback ) {
+
+            $.ajax( {
+                url    : globalUrl.globalUrl + "hotelslist",
+                method : "GET",
+                success: function ( data ) {
+
+                    if ( data[ "errno" ] !== "0" ) {
+                        alert( data[ "errmsg" ] );
+                        callback( false );
+                    }
+
+
+                    var dataList = data[ "hotel_list" ];
+
+                    function page ( dataList, row, callback ) {
+                        var wrapArr = [];
+                        var tempVal = 0;
+                        var tempArr = [];
+
+                        for ( let k = 0; k< dataList.length; k++ ) {
+
+                            if( tempVal > row){
+                                wrapArr.push(tempArr);
+                                tempArr = [];
+                                tempVal = 0;
+                            }
+
+                            dataList[k].flag = (k + 1 );
+                            tempArr.push( dataList[k] );
+                            tempVal ++;
+                        }
+                        wrapArr.push(tempArr);
+                        callback( wrapArr );
+                    };
+
+                    page(dataList, 9, function ( dataList ) {
+
+                        //根据长度决定遍历几次生成几页dataList.length /10   如果分了十几二十页 怎么处理
+                        for( let i = 0; i < dataList.length; i++ ) {
+                            //""生成页索引
+                            let tempDataP = "<p data=" + i + "> " + (i + 1) + " </p>"
+                            $( ".page-footer" ).append( tempDataP );
+
+                        }
+
+
+                        var tempRow = "";
+                        for ( let i = 0; i < dataList[0].length; i++ ) {
+
+                            tempRow =
+                                "<tr class='click-tr' data='id" + dataList[0][ i ][ "id" ] + "'>" +
+                                "    <td>" + dataList[0][ i ][ "flag" ]  + "</td>" +
+                                "    <td>" + dataList[0][ i ][ "title" ] + "</td>" +
+                                "    <td>" + dataList[0][ i ][ "address" ] + "</td>" +
+                                "    <td>" + dataList[0][ i ][ "price" ] + "</td>" +
+                                "</tr>";
+
+                            $( "#tab" ).append( tempRow );
+                        }
+
+                        //点击页数
+                        $(".page-footer>p").click(function () {
+
+                            //clearRow
+                            $( ".click-tr" ).remove();
+
+                            //根据索引 替换
+                            let pageData = dataList[$(this).attr("data")];
+                            var tempRow = "";
+                            for ( let i = 0; i < pageData.length; i++ ) {
+
+                                tempRow =
+                                    "<tr class='click-tr' data='id" + pageData[ i ][ "id" ] + "'>" +
+                                    "    <td>" + pageData[ i ][ "flag" ] + "</td>" +
+                                    "    <td>" + pageData[ i ][ "title" ] + "</td>" +
+                                    "    <td>" + pageData[ i ][ "address" ] + "</td>" +
+                                    "    <td>" + pageData[ i ][ "price" ] + "</td>" +
+                                    "</tr>";
+
+                                $( "#tab" ).append( tempRow );
+                            }
+                            //如果下一页了，这个就失效 需要重新定义
+                            clickRow();
+                        });
+
+
+                        callback( true );
+
+
+                    })
+
+
+                },
+                error  : function () {
+                    alert( "无法连接服务器" );
+                    callback(false);
+                }
+
+            } );
+
+        };
+
+        var arr = [ $("#standard"), $("#total"), $("#price") ];
+        getHotels( function ( tf ) {
+
+            if( !tf ){
+                return;
+            }
+
+
+            for ( var i = 0; i < arr.length; i++ ) {
+
+                arr[i].blur(function () {
+
+                    if( Number( $(this).val() ) < 0 ){
+                        $(this).val(0);
+                    }
+
+                });
+            }
+
+            clickRow();
+
+        });
+
+        function clickRow () {
+            $( ".click-tr" ).click( function () {
+                var self = $( this );
+
+                $( ".alert-info" ).removeClass( "hide" );
+                hotelId   = self.attr( "data" ).slice(2);
+                //根据id获取详细信息
+                getHotelsById( hotelId, function ( msg ) {
+                    if( !msg ){
+                        return;
+                    }
+                    /*
+                    * {
+                         {
+                            "address"   : "广州市臭水沟旁",
+                            "id"        : 5,
+                            "price"     : 99.99,
+                            "standard"  : "5星级标准",
+                            "title"     : "万达嘉华酒店2222",
+                            "total"     : 50  // 剩余总数
+                          }
+                        }
+                    * */
+                    $("#address"  ).val( msg[ "address"   ] );
+                    $("#id"       ).val( msg[ "id"        ] );
+                    $("#price"    ).val( msg[ "price"     ] );
+                    $("#standard" ).val( msg[ "standard"  ] );
+                    $("#title"    ).val( msg[ "title"     ] );
+                    $("#total"    ).val( msg[ "total"     ] );
+
+                });
+            } );
+        };
+
+        function getHotelsById ( id, callback ) {
+
+            $.ajax({
+                url: globalUrl.globalUrl + "hotels/" + id,
+                method: "GET",
+                success: function ( data ) {
+
+                    if( data["errno"] !== "0" ){
+                        alert( data["errmsg"] );
+                        callback(false);
+                    }
+
+                    callback( data["hotel"] );
+
+                },
+                error: function () {
+
+                    alert( "连接服务器失败" );
+                    callback(false);
+                }
+
+            })
+
+        };
+
+
+        $( ".alert-center-mask" ).click( function () {
+
+            $( ".alert-info" ).addClass( "hide" );
+
+        });
+
+
+
+        //删除
+        $(".btn").click(function () {
+
+            if( checkNumberIsTrue() ){
+
+                checkNumberIsTrue().css( "background","red" );
+                checkNumberIsTrue().css( "color","#fff" );
+                return;
+            }
+
+
+            if( !hotelId ){
+                alert( "获取hotelId 失败!" );
+                return;
+            }
+
+            $.confirm({
+                title: '警告',
+                text: '是否确认删除',
+                onOK: function () {
+
+                    $.ajax( {
+                        url        : globalUrl.globalUrl + "admin/hotels/" + hotelId,
+                        type       : "delete",
+                        contentType: "application/json",
+                        headers    : {
+                            "Authorization": window.sessionStorage.getItem( "token" )
+                        },
+                        success    : function ( msg ) {
+
+                            if ( msg[ "errno" ] !== "0" ) {
+                                alert( msg[ "errmsg" ] );
+                                return;
+                            }
+
+                            alert( msg[ "errmsg" ] );
+                            //需要刷新一下页面
+                            window.location.href = "./getAllHotel.html";
+                        },
+                        error      : function ( xhr, textstatus, thrown ) {
+                            alert( "无法连接服务器" );
+                        }
+                    } );
+                }
+            })
+        });
+
+        //修改
+        $(".btn1").click(function () {
+
+            if( checkNumberIsTrue() ){
+
+                checkNumberIsTrue().css( "background","red" );
+                checkNumberIsTrue().css( "color","#fff" );
+                return;
+            }
+
+            if( !checkNumberIsTrue() ){
+
+                clearStyle();
+            }
+
+            if( !hotelId ){
+                alert( "获取hotelId 失败!" );
+                return;
+            }
+
+            var tempNum = $("#standard").val().trim();
+            if( !tempNum ){
+
+                tempNum = "0";
+            }
+
+
+            $.ajax({
+                url: globalUrl.globalUrl + "admin/hotels/" + hotelId,
+                type: "PUT",
+                contentType: "application/json",
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                data       : JSON.stringify({
+                    "title"   : $("#title" ).val(),
+                    "address" : $("#address" ).val(),
+                    "price"   : $("#price" ).val(),
+                    "standard": tempNum,
+                    "total"   : Number( $("#total" ).val() )
+                }),
+                success: function(msg){
+
+                    if(msg["errno"] !== "0" ){
+                        alert( msg["errmsg"] );
+                        return;
+                    }
+
+                    alert( msg["errmsg"] );
+                    //需要刷新一下页面
+                    window.location.href = "./getAllHotel.html";
+                },
+                error:function(xhr,textstatus,thrown){
+                    alert( "无法连接服务器" );
+                }
+            });
+
+
+        });
+
+
+        function checkNumberIsTrue () {
+            if( Number( $("#price" ).val() ) <= 0 ) {
+                return $("#price" );
+            }
+
+            if( Number( $("#standard" ).val() ) < 0 || Number( $("#standard" ).val() ) > 5 ) {
+                return $("#standard" );
+            }
+
+            if( Number( $("#total" ).val() ) <= 0 ) {
+                return $("#total" );
+            }
+        };
+
+        function clearStyle () {
+
+            $("#price" ).css( "background", "#fff").css("color", "#000");
+            $("#standard" ).css( "background", "#fff").css("color", "#000");
+            $("#total" ).css( "background", "#fff").css("color", "#000");
+
+        }
+
+
+    } )
+</script>
+</body>
+</html>

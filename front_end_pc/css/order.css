@@ -1,0 +1,279 @@
+
+@media screen and ( min-width: 768px ){
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(221, 221, 221, .2);
+    }
+
+    .detail-info {
+        width: 768px;
+        margin: 0 auto;
+    }
+
+    .header-title {
+        width: 100%;
+    }
+
+    .header-title > p {
+        padding: 1rem 1rem 0.5rem 1rem;
+        color: #666;
+        font-size: 1.8rem;
+    }
+
+    .active-info {
+        width: 100%;
+    }
+
+    .active-center {
+        width: 100%;
+        margin: 0 auto;
+        background-color: #fff;
+    }
+
+
+    .bottom-btns {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        font-size: 1.8rem;
+    }
+
+    .bottom-btns>div {
+        width: 100%;
+        background: #fff;
+        margin-bottom: 2rem;
+    }
+
+    .back-btn{
+        display: flex;
+        margin-top: 2rem;
+        justify-content: space-around;
+    }
+
+    .back-btn>p {
+        width: 45%;
+    }
+
+    .hotel-info {
+        width: 768px;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        background-color: rgba(0,0,0, 0.7);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+        left: 50%;
+        -webkit-transform: translateX(-50%);
+        -moz-transform: translateX(-50%);
+        -ms-transform: translateX(-50%);
+        -o-transform: translateX(-50%);
+        transform: translateX(-50%);
+    }
+
+    .hotel-info > div{
+        background: #3d3d3d;
+    }
+
+    .hotel-list {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: #fff;
+        font-size: 1.6rem;
+        background: #59a0ab;
+    }
+
+
+    .hotel-detail{
+        height: 12rem;
+        font-size: 1.5rem;
+    }
+
+    .hotel-address {
+        font-size: 1.5rem;
+    }
+
+    .star {
+        font-size: 1rem;
+        letter-spacing: 5px;
+    }
+
+    .hotel-price-total {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+    }
+
+    .weui-cell__ft {
+        font-size: 0.8rem;
+    }
+
+    .price, .total {
+        color: #ff6700;
+    }
+
+    .hotel-info-items {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.8rem;
+        overflow: auto;
+    }
+
+
+    .hotel-info-items>div {
+        width: 100%;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+    }
+
+
+    .show {
+        display: block;
+    }
+
+    .hide {
+        display: none;
+    }
+}
+
+@media screen and ( max-width: 768px ){
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(221, 221, 221, .2);
+    }
+
+
+
+    .header-title {
+        width: 100%;
+    }
+
+    .header-title > p {
+        padding: 1rem 1rem 0.5rem 1rem;
+        color: #666;
+        font-size: 1.8rem;
+    }
+
+    .active-info {
+        width: 100%;
+    }
+
+    .active-center {
+        width: 90%;
+        margin: 0 auto;
+        background-color: #fff;
+    }
+
+
+    .bottom-btns {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        font-size: 1.8rem;
+    }
+
+    .bottom-btns>div {
+        width: 100%;
+        background: #fff;
+        margin-bottom: 2rem;
+    }
+
+    .back-btn{
+        display: flex;
+        margin-top: 2rem;
+        justify-content: space-around;
+    }
+
+    .back-btn>p {
+        width: 45%;
+    }
+
+    .hotel-info {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        background-color: rgba(0,0,0, 0.7);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 2;
+    }
+
+    .hotel-info > div{
+        background: #3d3d3d;
+    }
+
+    .hotel-list {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        color: #fff;
+        font-size: 1.6rem;
+        background: #59a0ab;
+    }
+
+
+    .hotel-detail{
+        height: 12rem;
+        font-size: 1.5rem;
+    }
+
+    .hotel-address {
+        font-size: 1.5rem;
+    }
+
+    .star {
+        font-size: 1rem;
+        letter-spacing: 5px;
+    }
+
+    .hotel-price-total {
+        border: 1px solid #ccc;
+        padding: 0.5rem;
+    }
+
+    .weui-cell__ft {
+        font-size: 0.8rem;
+    }
+
+    .price, .total {
+        color: #ff6700;
+    }
+
+    .hotel-info-items {
+        display: flex;
+        flex-direction: column;
+        font-size: 1.8rem;
+        overflow: auto;
+    }
+
+
+    .hotel-info-items>div {
+        width: 100%;
+        background: #fff;
+        border-bottom: 1px solid #ccc;
+    }
+
+
+    .show {
+        display: block;
+    }
+
+    .hide {
+        display: none;
+    }
+}

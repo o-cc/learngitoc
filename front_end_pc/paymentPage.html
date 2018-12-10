@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>缴费</title>
+    <link rel="stylesheet" href="css/weui.min.css">
+    <link rel="stylesheet" href="css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/globalCss.css">
+    <link rel="stylesheet" href="css/payment.css">
+</head>
+<body>
+<div class="weui-loadmore loading">
+    <i class="weui-loading"></i>
+    <span class="weui-loadmore__tips">正在加载</span>
+</div>
+
+<div class="center-box hide">
+    <i class="weui-icon-success weui-icon_msg" style="display: flex;align-items: center;">
+        <span style="font-size: 2.5rem;margin-left: 2.5rem;">支付成功！</span>
+    </i>
+    <div class="show-success">
+        <p>支付流水号：</p>
+        <span id="trade-num"></span>
+    </div>
+
+    <div style="margin-top: 2rem;width: 95%;">
+        <a style="background: #2a33ff; color: #fff;" class="weui-btn weui-btn_default go_back">回到首页</a>
+
+    </div>
+
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-weui.min.js"></script>
+<script src="js/checkToken.js"></script>
+<script src="js/globalUrl.js"></script>
+<script src="js/payment.js"></script>
+</body>
+</html>

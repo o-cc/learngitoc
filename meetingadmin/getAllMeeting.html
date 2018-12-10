@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center {
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
+            /*align-items: center;*/
+        }
+
+        .center > div {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .title {
+            font-size: 1.5em;
+
+        }
+
+        .tab {
+            width: 100%;
+            font-size: 1.3em;
+            margin-left: 10px;
+            border: 1px solid #1A5CC6;
+        }
+
+        .tab tr:first-child {
+            color: #000;
+        }
+
+        .tab tr:nth-child(2n-1) {
+            background-color: #aaa;
+        }
+
+        .tab tr:nth-child(2n) {
+            background-color: #ccc;
+        }
+
+        .tab td {
+            min-width: 80px;
+            height: 3em;
+            text-align: center;
+        }
+
+        .alert-info, .alert-module, .alert-module-info {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .alert-module, .alert-module-info {
+
+            z-index: 3;
+
+        }
+
+        .alert-info-mask, .alert-module-mask {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 1;
+        }
+
+        .alert-center, .alert-module-center, .alert-module-info-center {
+            width: 80%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 1.3em;
+            z-index: 2;
+        }
+
+        .alert-center > div {
+            width: 100%;
+            height: 2.5em;
+            line-height: 2.5em;
+            display: flex;
+            background-color: #ccc;
+        }
+
+        .alert-center > div > div {
+            flex: 1;
+            border: 1px solid #fff;
+            padding-left: 1em;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size:  1em;
+        }
+
+        .alert-center > div > div input {
+            width: 70%;
+            height: 70%;
+            padding-left: 5px;
+            font-size: 1em;
+        }
+
+        .alert-module-center > div {
+            width: 100%;
+            height: 2.5em;
+            line-height: 2.5em;
+            display: flex;
+            background-color: #ccc;
+        }
+
+        .alert-module-center > div > div {
+            flex: 1;
+            border: 1px solid #fff;
+            padding-left: 1em;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            font-size:  1em;
+        }
+
+        .alert-module-center > div > div input {
+            width: 70%;
+            height: 70%;
+            padding-left: 5px;
+            font-size: 1em;
+        }
+
+        .alert-module-info-center > div {
+            width: 100%;
+            height: 3em;
+            line-height: 2.5em;
+            display: flex;
+            background-color: #ccc;
+
+        }
+
+        .alert-module-info-center > div > div {
+            flex: 1;
+            border: 1px solid #fff;
+            padding-left: 1em;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size:  1em;
+        }
+
+        .alert-module-info-center > div > div input {
+            width: 95%;
+            height: 70%;
+            font-size: 1em;
+        }
+
+        .confirm-module {
+            margin: 0 auto;
+            width: 30%;
+            height: 90%;
+            border: 0;
+            background: #f50;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .change-module, .delete-module {
+            margin: 0 auto;
+            width: 40%;
+            height: 90%;
+            border: 0;
+            background: #f50;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .click-tr {
+            cursor: pointer;
+        }
+
+        .btn, .btn1, .btn2, .btn3 {
+            width: 50%;
+            height: 100%;
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            background-color: #ff6700;
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-footer p{
+            width: 40px;
+            height: 40px;
+            background-color: #759fcc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="center">
+    <div id="contain">
+        <p class="title">查看会议信息:</p>
+        <table class="tab" id="tab">
+            <tr>
+                <td>序号</td>
+                <td>标题</td>
+                <td>主办方</td>
+            </tr>
+
+        </table>
+        <div class="page-footer">
+
+        </div>
+
+    </div>
+
+</div>
+
+<div class="alert-info hide" id="alert">
+    <!--<div class="quit">×</div>-->
+    <div class="alert-center">
+        <div>
+            <div>
+                会议标题：
+                <input type="text" id="title">
+            </div>
+            <div>
+                会议介绍：
+                <input type="text" id="introduce">
+            </div>
+        </div>
+
+        <div>
+            <div>会议费用：
+                <input type="number" id="cost">
+            </div>
+            <div>开始日期：
+                <input type="text" id="start_time">
+            </div>
+        </div>
+
+        <div>
+            <div>结束日期：
+                <input type="text" id="end_time">
+            </div>
+            <div>截止日期：
+                <input type="text" id="deadline">
+            </div>
+        </div>
+
+        <div>
+            <div>主办方<span style="opacity: 0">哼</span>：
+                <input type="text" id="committee">
+            </div>
+            <div>赞助方<span style="opacity: 0">哈</span>：
+                <input type="text" id="support">
+            </div>
+        </div>
+
+        <div>
+            <div>参加人数：
+                <input type="number" id="attend_num">
+            </div>
+            <div>报名人数：
+                <input type="number" id="sign_num">
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <span>会议图片：</span>
+                <a href="" target="_blank" style="font-size: 0.8em;" id="homepage"></a>
+            </div>
+
+            <div>会议地址：
+                <input type="text" id="address">
+            </div>
+        </div>
+
+        <div>
+            <div>
+               <p>
+                   图片修改:
+                   <input type="file" id="pic" accept="image/*">
+               </p>
+
+            </div>
+            <div>
+                    <span style="white-space: nowrap;">是否在首页显示:</span>
+                    <input type="checkbox" style="width: 10%;" id="show_meet">
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <span style="white-space: nowrap;">首页会议标题颜色:</span>
+                <input type="color" style="width: 10%;" id="title-color">
+            </div>
+            <div style="text-align: right;">
+                <button class="btn2">查看模块信息</button>
+                <button class="btn3">添加会议模块</button>
+                <!--<a href="#alert" id="go-alert" style="display: none;opacity: 0;"></a>-->
+            </div>
+
+        </div>
+
+        <div>
+
+            <div style="text-align: right;">
+                <button class="btn">删除会议</button>
+                <button class="btn1">确认修改</button>
+                <!--<a href="#alert" id="go-alert" style="display: none;opacity: 0;"></a>-->
+            </div>
+        </div>
+    </div>
+    <div class="alert-info-mask" ></div>
+
+</div>
+
+<div class="alert-module hide">
+    <div class="alert-module-center">
+        <div>
+           <div>模块名称：
+               <input type="text" id="module-name">
+           </div>
+
+        </div>
+        <div>
+            <div>链接地址：
+                <input type="text" id="module-link">
+            </div>
+        </div>
+        <div>
+            <div>模块图标：
+                <input type="file" accept="image/*" id="module-pic">
+            </div>
+        </div>
+        <div>
+            <div>模块顺序：
+                <input type="number" id="module-sort">
+            </div>
+        </div>
+        <div>
+            <div>
+                <button class="confirm-module">确认添加</button>
+            </div>
+        </div>
+    </div>
+    <div class="alert-module-mask" ></div>
+</div>
+
+
+<div class="alert-module-info ">
+    <div class="alert-module-info-center" style="width: 90%;">
+        <div>
+            <div>模块序号</div>
+            <div>模块名称</div>
+            <div>模块地址</div>
+            <div>模块图标</div>
+            <div></div>
+        </div>
+        <div>
+            <div><input type="text"></div>
+            <div><input type="text"></div>
+            <div><input type="text"></div>
+            <div style="flex-direction: column;">
+                <a style="height: 2em;">sdfsadfasdfsd.jpg</a>
+                <input type="file" accept="image/*"></div>
+            <div>
+                <button class="change-module">修改</button>
+                <button class="delete-module">删除</button>
+            </div>
+        </div>
+
+        <div>
+
+        </div>
+    </div>
+    <div class="alert-module-mask" ></div>
+</div>
+
+<script src="scripts/checkToken.js"></script>
+<script src="scripts/globalUrl.js"></script>
+<script src="scripts/jquery/jquery.min.js"></script>
+<script src="scripts/jquery/lrz.js"></script>
+<script>
+    $( function () {
+
+        var all = [ $("#title"),  $("#cost"), $("#start_time"), $("#end_time"), $("#deadline") ];
+
+        var homepageBase64 = "";
+        $( "#pic" ).change( function () {
+
+            lrz( this.files[ 0 ], {
+                width: 300 //设置压缩参数
+            } ).then( function ( rst ) {
+                /* 处理成功后执行 */
+                homepageBase64 = rst.base64;
+
+            } ).catch( function ( err ) {
+                /* 处理失败后执行 */
+                console.log( err );
+            } )
+
+        } )
+
+        var moduleBase64 = "";
+        $( "#module-pic" ).change( function () {
+
+            lrz( this.files[ 0 ], {
+                //width: 300 //设置压缩参数
+            } ).then( function ( rst ) {
+                /* 处理成功后执行 */
+                moduleBase64 = rst.base64;
+
+            } ).catch( function ( err ) {
+                /* 处理失败后执行 */
+                console.log( err );
+            } )
+
+        } )
+
+
+        $( ".alert-info-mask" ).click(function () {
+            $(".alert-info").addClass( "hide" );
+
+        })
+        for (var i = 0; i< all.length; i++ ){
+            all[i].blur(function () {
+
+                if( !$(this).val().trim() ) {
+                    borderRed( $(this) );
+                }else{
+                    resetBorder( $(this) );
+                }
+
+            });
+        }
+
+        var numberType = [  $( "#attend_num" ), $( "#cost" ), $( "#sign_num" ) ];
+
+        for( var i = 0; i < numberType.length; i++ ){
+
+            numberType[i].blur(function () {
+                    if( Number( $(this).val() ) < 0 ){
+                        $(this).val( 0 );
+                    }
+
+            })
+        }
+
+
+        var userList  = {};
+        var meetingId = undefined;
+
+
+        getMeetings( function ( dataList ) {
+            if( !dataList ) {
+                return;
+            }
+
+            clickRow( dataList );
+        })
+
+        $( ".quit" ).click( function () {
+            $( ".alert-info" ).addClass( "hide" );
+        });
+
+        //删除
+        $( ".btn" ).click( function () {
+
+            if ( !meetingId ) {
+                alert( "获取meetingId 失败!" );
+                return;
+            }
+
+            $.ajax( {
+                url        : globalUrl.globalUrl + "admin/meetings/" + meetingId,
+                type       : "delete",
+                contentType: "application/json",
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                success    : function ( msg ) {
+
+                    if ( msg[ "errno" ] !== "0" ) {
+                        alert( msg[ "errmsg" ] );
+                        return;
+                    }
+
+                    alert( msg[ "errmsg" ] );
+                    //需要刷新一下页面
+                    window.location.href = "./getAllMeeting.html";
+                },
+                error      : function ( xhr, textstatus, thrown ) {
+                    alert( "无法连接服务器" );
+                }
+            } );
+
+        } );
+
+        let meetingTitleBg = "";
+        //选取会议标题颜色
+        $( "#title-color" ).change( function() {
+
+            $(this).click();
+            meetingTitleBg = $( this ).val();
+        } )
+
+        //确认修改
+        $( ".btn1" ).click( function () {
+
+            if ( !meetingId ) {
+                alert( "获取meetingId 失败!" );
+                return;
+            }
+
+            for (var i = 0; i< all.length; i++ ){
+
+                    if( !all[i].val().trim() ) {
+                        borderRed( all[i] );
+                        return;
+
+                    }else{
+                        resetBorder( all[i] );
+                    }
+            }
+
+            $.ajax( {
+                url        : globalUrl.globalUrl + "admin/meetings/" + meetingId,
+                type       : "PUT",
+                contentType: "application/json",
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                data       : JSON.stringify ({
+
+                    "attend_num": Number( $( "#attend_num" ).val() ),
+                    "committee" : $( "#committee" ).val(),
+                    "cost"      : Number( $( "#cost" ).val() ),
+                    "deadline"  : $( "#deadline" ).val().replace( "年", "-" ).replace( "月", "-" ).replace("日"," "),
+                    "end_time"  : $( "#end_time" ).val().replace( "年", "-" ).replace( "月", "-" ).replace("日"," "),
+                    "homepage"  : homepageBase64,
+                    "introduce" : $( "#introduce" ).val(),
+                    "sign_num"  : Number( $( "#sign_num" ).val() ),
+                    "start_time": $( "#start_time" ).val().replace( "年", "-" ).replace( "月", "-" ).replace("日"," "),
+                    "support"   : $( "#support" ).val(),
+                    "title"     : $( "#title" ).val(),
+                    "address"   : $( "#address" ).val(),
+                    "status"    : $( "#show_meet" ).prop("checked")?"1":"0",
+                    "bgcolor"   : meetingTitleBg
+                }),
+                success    : function ( msg ) {
+
+                    if ( msg[ "errno" ] !== "0" ) {
+                        alert( msg[ "errmsg" ] );
+                        return;
+                    }
+
+                    alert( msg[ "errmsg" ] );
+                    //需要刷新一下页面
+
+                    window.location.href = "./getAllMeeting.html";
+                },
+                error      : function ( xhr, textstatus, thrown ) {
+                    alert( "无法连接服务器" );
+                }
+            } );
+
+        } );
+
+        //==============模块=================
+        $("#module-sort").blur(function () {
+
+            if(  $(this).val() < 0 ){
+                $(this).val(1);
+            }
+        })
+        //显示模块
+        $(".btn2").click(function () {
+
+        });
+        //显示添加模块
+        $(".btn3").click(function () {
+            $(".alert-module").removeClass("hide");
+        });
+
+        //确认添加模块
+        $(".confirm-module").click( function () {
+
+            if( !moduleBase64 ){
+                alert( "请选择图片" );
+                return;
+            }
+
+             if( !meetingId ){
+                alert( "不存在会议ID" );
+                return;
+            }
+
+            $.ajax({
+                url: globalUrl.globalUrl + "modules/" + meetingId,
+                method: "POST",
+                contentType: "application/json",
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                data: JSON.stringify({
+                    "image" : moduleBase64,
+                    "title" : $("#module-name").val().trim(),
+                    "next_href": $("#module-link").val().trim(),
+                    "meeting_id": meetingId,
+                    "sort": $("#module-sort").val(),
+                }),
+                success: function ( data ) {
+                    /*
+                    * {
+                        'image': 'base64;//frmmregm',
+                        'title': '参加会议',
+                        'sort': 1,
+                        'next_href': 'http://127.0.0.1:8080/serviceInfo.html',
+                        'meeting_id': 6
+                    }
+                    * */
+                    if( data["errno"]  !== "0" ){
+
+                        alert(data["errmsg"]);
+                        return;
+                    }
+
+                    alert(data["errmsg"]);
+                    $(".alert-module").addClass( "hide" );
+                },
+                error: function (err ) {
+                    alert( "添加模块无法链接服务器" );
+                    return;
+
+                }
+            })
+
+        } )
+
+        $(".alert-module-mask").click(function () {
+
+            $(".alert-module").addClass( "hide" );
+
+        })
+
+        /*
+        dataList:分页的源数据格式
+        * [{},{},{},{}]
+        *
+        * return wrapArr: 格式化成分页
+        *    [ [{},{} ],[ {}, {} ,{}], ]
+        */
+        function page ( dataList, row, callback ) {
+            var wrapArr = [];
+            var tempVal = 0;
+            var tempArr = [];
+
+            for ( let k = 0; k< dataList.length; k++ ) {
+
+                if( tempVal > row){
+                    wrapArr.push(tempArr);
+                    tempArr = [];
+                    tempVal = 0;
+                }
+
+                dataList[k].flag = (k + 1 );
+                tempArr.push( dataList[k] );
+                tempVal ++;
+            }
+            wrapArr.push(tempArr);
+            callback( wrapArr );
+        };
+
+        function getMeetings ( callback ) {
+
+            $.ajax( {
+                url    : globalUrl.globalUrl + "admin/meetings",
+                method : "GET",
+                headers: {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                success: function ( data ) {
+
+                    if ( data[ "errno" ] !== "0" ) {
+                        alert( data[ "errmsg" ] );
+                        callback(false);
+                    }
+
+                    var dataList = data[ "meeting" ];
+
+
+                    page(dataList, 19, function ( wrapArr ) {
+                        //根据长度决定遍历几次生成几页dataList.length /10   如果分了十几二十页 怎么处理
+                        for( let i = 0; i < wrapArr.length; i++ ) {
+                            //""生成页索引
+                            let tempDataP = "<p data=" + i + "> " + (i + 1) + " </p>"
+                            $( ".page-footer" ).append( tempDataP );
+                        }
+
+                        var tempRow = "";
+                        for ( let i = 0; i < wrapArr[0].length; i++ ) {
+
+                            tempRow =
+                                "<tr class='click-tr' data='id" + wrapArr[0][ i ][ "id" ] + "'>" +
+                                "    <td>" + wrapArr[0][ i ][ "flag" ]  + "</td>" +
+                                "    <td>" + wrapArr[0][ i ][ "title" ] + "</td>" +
+                                "    <td>" + wrapArr[0][ i ][ "committee" ] + "</td>" +
+
+                                "</tr>";
+
+                            $( "#tab" ).append( tempRow );
+                        }
+
+                        //点击页数  耦合有点严重 wrapArr不应该直接在事件使用
+                        $(".page-footer>p").click(function () {
+
+                            let pageData = wrapArr [ $(this).attr("data") ]; //点击页的数据
+
+                            //clearRow
+                            $( ".click-tr" ).remove();
+                            //根据索引 替换
+
+                            var tempRow = "";
+                            for ( let i = 0; i < pageData.length; i++ ) {
+
+                                tempRow =
+                                    "<tr class='click-tr' data='id" + pageData[ i ][ "id" ] + "'>" +
+                                    "    <td>" + pageData[ i ][ "flag" ] + "</td>" +
+                                    "    <td>" + pageData[ i ][ "title" ] + "</td>" +
+                                    "    <td>" + pageData[ i ][ "committee" ] + "</td>" +
+                                    "</tr>";
+
+                                $( "#tab" ).append( tempRow );
+                            }
+                            //如果下一页了，这个就失效 需要重新定义
+                            clickRow( dataList );
+                        });
+
+                        //这个文件有点特殊 必须callback一个dataList
+                        callback( dataList );
+                    })
+
+                },
+                error  : function () {
+                    alert( "无法连接服务器" );
+                    callback(false);
+                }
+            } );
+        };
+
+        //点击每一行
+        function clickRow (  dataList ) {
+
+            $( ".click-tr" ).click( function () {
+
+                $( ".alert-info" ).removeClass( "hide" );
+                //定位到弹出框
+                var a = document.createElement("a");
+                a.href = "#alert";
+                a.click();
+                a.style.display = "none";
+
+                var self  = $( this );
+                meetingId = parseInt (self.attr( "data" ).slice( 2 ) );
+
+
+                /*
+                   * {
+                       "title": "广东省2018年度大会",
+                       "id": 1,
+                       "start_time": "2018-11-02",
+                       "end_time":"2018-11-05",
+                       "deadline": "2018-10-29",  // 截止时间
+                       "committee":"国际主委会",
+                       "introduce":"该会议是由广东省委开的, ....",  // 介绍
+                       "homepage":"http://www.mweimw.com",
+                       "support":"由蒙牛酸奶支持",
+                       "sign_num": 50,  # 报名人数
+                       "attend_num": 0,  # 参加人数
+                       "cost": 200.22  # 报名费用
+                       "address": "地址"
+                       }
+                   * */
+                let msg = dataList[ Number(self.children().eq(0).html()) - 1 ];
+                $( "#title" ).val( msg[ "title" ] );
+                $( "#id" ).val( msg[ "id" ] );
+                $( "#start_time" ).val( msg[ "start_time" ] );
+                $( "#end_time" ).val( msg[ "end_time" ] );
+                $( "#deadline" ).val( msg[ "deadline" ] );
+                $( "#committee" ).val( msg[ "committee" ] );
+                $( "#introduce" ).val( msg[ "introduce" ] );
+
+                //http://127.0.0.1:8080/front_end_pc/upload/index/wwgrwgg.jpg
+                var picName = msg[ "homepage" ].slice( msg[ "homepage" ].lastIndexOf("/") + 1 );
+                $( "#homepage" ).html( picName );
+                $( "#homepage" ).attr( "href",msg[ "homepage" ] );
+
+                $( "#support" ).val( msg[ "support" ] );
+                $( "#sign_num" ).val( msg[ "sign_num" ] );
+                $( "#attend_num" ).val( msg[ "attend_num" ] );
+                $( "#cost" ).val( msg[ "cost" ] );
+                $( "#address" ).val( msg[ "address" ] );
+
+                //if( msg[ "status" ] ){
+                //    console.log( msg[ "status" ]  );
+                $( "#show_meet" ).prop( "checked",msg[ "status" ] );
+                //}else{
+                //    $( "#show_meet" ).prop( "checked", null);
+                //}
+
+                if( !msg["bgcolor"] || msg["bgcolor"].length != 7 ){
+                    $( "#title-color" ).val( "#F96E57" );
+                }else{
+                    $( "#title-color" ).val( msg["bgcolor"] );
+                }
+
+            } )
+
+
+        };
+
+
+        function borderRed ( ele ) {
+            ele.css("border", "2px solid red" );
+        }
+
+        function resetBorder ( ele ) {
+            ele.css("border", "1px solid #ccc" );
+        }
+
+
+    } )
+</script>
+</body>
+</html>

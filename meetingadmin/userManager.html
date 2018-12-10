@@ -1,0 +1,1081 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="scripts/jquery-weui.min.css">
+    <link rel="stylesheet" href="scripts/weui.min.css">
+    <style>
+        body, html {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center {
+            width: 100%;
+            height: 100%;
+            overflow: scroll;
+            /*align-items: center;*/
+        }
+
+        .center > div {
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        .title {
+            font-size: 1.5em;
+
+        }
+
+        .tab {
+            width: 100%;
+            font-size: 1.3em;
+            margin-left: 10px;
+            border: 1px solid #1A5CC6;
+        }
+
+        .tab tr:first-child {
+            color: #000;
+        }
+
+        .tab tr:nth-child(2n-1) {
+            background-color: #aaa;
+        }
+
+        .tab tr:nth-child(2n) {
+            background-color: #ccc;
+        }
+
+        .tab td {
+            min-width: 80px;
+            height: 3em;
+            text-align: center;
+        }
+
+        .alert-info , .alert-record, .alert-record-detail {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            min-height: 100%;
+            background: rgba(0, 0, 0, .7);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .quit, .quit_record, .quit_record-detail{
+            position: absolute;
+            top: 0;
+            right: 3%;
+            color: #FFFFFF;
+            font-size: 3em;
+            cursor: pointer;
+            z-index: 1111;
+        }
+
+        .alert-center, .alert-record-center, .alert-detail-center {
+            width: 80%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 1.3em;
+
+        }
+        .alert-center{
+            z-index: 2;
+        }
+
+        .alert-record-center{
+           z-index: 4;
+        }
+
+        .record-page-footer {
+            z-index: 5;
+        }
+
+        .alert-detail-center {
+            z-index: 6;
+        }
+
+        .alert-center-mask {
+            z-index: 1;
+        }
+
+        .alert-detail-mask{
+            z-index: 5;
+        }
+
+        .alert-record-mask{
+            z-index: 3;
+        }
+        .alert-record-mask, .alert-detail-mask, .alert-center-mask{
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+
+        }
+
+        .alert-center > div {
+            width: 100%;
+            height: 2.5em;
+            line-height: 2.5em;
+            display: flex;
+            background-color: #ccc;
+        }
+
+        .alert-center > div > div {
+            flex: 1;
+            border: 1px solid #fff;
+            padding-left: 1em;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+
+        .alert-center > div > div input {
+            width: 70%;
+            height: 70%;
+            padding-left: 5px;
+            font-size: 1em;
+        }
+
+        .click-tr {
+            cursor: pointer;
+        }
+
+        .btn, .btn1, .get_meetings {
+            width: 100%;
+            height: 100%;
+            font-size: 1em;
+            color: #fff;
+            background-color: #ff6700;
+            cursor: pointer;
+        }
+        
+        .hide {
+            display: none;
+        }
+
+        .show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .page-footer, .record-page-footer {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-footer p{
+            width: 40px;
+            height: 40px;
+            background-color: #759fcc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+        }
+
+        .record-page-footer p{
+            width: 40px;
+            height: 40px;
+            /*background-color: #759fcc;*/
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-left: 10px;
+            color: #fff;
+            font-size: 20px;
+        }
+
+        .alert-record-center>div {
+            display: flex;
+            width: 90%;
+            height: 50px;
+            margin-bottom: 10px;
+            align-items: center;
+            cursor: pointer;
+           border-bottom: 1px solid #ff6700;
+        }
+
+
+        .alert-record-center>div>p {
+            flex: 1;
+            text-align: center;
+        }
+
+        .alert-detail-center>div {
+            display: flex;
+            width: 90%;
+            height: 50px;
+            margin-bottom: 10px;
+            align-items: center;
+            cursor: pointer;
+            border-bottom: 1px solid #ff6700;
+        }
+
+        .alert-detail-center input {
+            width: 80%;
+            padding-left: 15px;
+            height: 40px;
+            border: 0;
+            font-size: 1em;
+        }
+
+        .alert-btn-re {
+            width: 40%;
+            height: 50px;
+            background: #ff6700;
+            border: 0;
+            font-size: 1em;
+            color: #FFE;
+        }
+
+    </style>
+</head>
+<body>
+<div class=" center">
+    <div id="contain">
+        <p class="title">查看用户详细信息:</p>
+        <table class="tab" id="tab">
+            <tr>
+                <td>序号</td>
+                <td>姓名</td>
+                <td>身份证</td>
+                <td>出生日期</td>
+                <td>手机</td>
+                <td>邮箱</td>
+            </tr>
+
+        </table>
+
+        <div class="page-footer">
+
+        </div>
+
+
+    </div>
+
+</div>
+
+<div class="alert-info hide">
+    <div class="quit">×</div>
+    <div class="alert-center">
+        <div>
+            <div>
+                中文姓名:
+                <input type="text" id="username" >
+            </div>
+            <div>
+                姓名拼音:
+                <input type="text" id="spellname">
+            </div>
+        </div>
+
+        <div>
+            <div>身份证&nbsp;&nbsp;&nbsp;:
+                <input type="text" id="identity_num" disabled>
+            </div>
+            <div>手机&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                <input type="text" id="mobile">
+            </div>
+        </div>
+
+        <div>
+            <div>性别&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                <input type="text" id="gender">
+            </div>
+            <div>邮箱&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                <input type="text" id="email">
+            </div>
+        </div>
+
+        <div>
+            <div>
+                <span>所在地区:</span>
+                <input type="text" id="province" style="width: 20%;border: 0;">
+                <input type="text" id="city"  style="width: 23%;border: 0;">
+                <input type="text" id="address"  style="width: 25%;border: 0;">
+            </div>
+            <div>出生日期:
+                <input type="date" id="birthday">
+            </div>
+        </div>
+
+        <div>
+            <div>最高学历:
+                <input type="text" id="hight_degree">
+            </div>
+            <div>工作单位:
+                <input type="text" id="work_addr">
+            </div>
+        </div>
+
+        <div>
+            <div>科室部门:
+                <input type="text" id="department">
+            </div>
+            <div>技术职称:
+                <input type="text" id="technical_title">
+            </div>
+        </div>
+        <div>
+            <div>行政职务:
+                <input type="text" id="executive_post">
+            </div>
+            <div>单位电话:
+                <input type="text" id="office_tel">
+            </div>
+        </div>
+
+        <div>
+
+            <div>个人简历:
+                <input type="text" id="resume">
+            </div>
+            <div style="text-align: right;">
+                <button class="get_meetings">查看报名记录</button>
+            </div>
+        </div>
+        <div>
+
+            <div>
+
+            </div>
+            <div style="text-align: right;">
+                <button class="btn">删除用户</button>
+                <button class="btn1">确认修改</button>
+            </div>
+        </div>
+    </div>
+    <div class="alert-center-mask" ></div>
+</div>
+
+<div class="alert-record hide">
+    <div class="alert-record-center">
+            <!--每条会议记录-->
+    </div>
+    <div class="alert-record-mask"></div>
+    <div class="record-page-footer">
+        <!--分页-->
+    </div>
+
+</div>
+
+
+<div class="alert-record-detail hide">
+    <div class="alert-detail-center">
+        <!--每条会议记录-->
+        <div>
+             <p>参加状态 : </p>
+             <input type="text" id='attend_status'>
+        </div>
+        <div>
+             <p>入住状态: </p>
+            <input type="text" id='checkin_status'>
+        </div>
+        <div>
+             <p>入住酒店: </p>
+            <input type="text" id='hotel_title'>
+        </div>
+        <div>
+             <p>是否就餐: </p>
+            <input type="text" id='is_eat'>
+        </div>
+        <div>
+             <p>是否支付: </p>
+            <input type="text" id='is_pay'>
+        </div>
+        <div>
+             <p>是否打印: </p>
+            <input type="text" id='is_print'>
+        </div>
+        <div>
+             <p>消费总额: </p>
+            <input type="text" id='money' disabled>
+        </div>
+        <div>
+             <p>支付流水: </p>
+            <input type="text" id='pay_num' disabled>
+        </div>
+        <div>
+             <p>支付方式: </p>
+            <input type="text" id='pay_type' disabled>
+        </div>
+        <div>
+             <p>演讲题目: </p>
+            <input type="text" id='speech_title'>
+        </div>
+        <div>
+             <p>报名途径: </p>
+            <input type="text" id='way'>
+        </div>
+
+
+        <div style="justify-content: center;">
+            <button class="alert-btn-re"> 修改 </button>
+        </div>
+    </div>
+    <div class="alert-detail-mask" ></div>
+
+</div>
+
+
+
+
+<script src="scripts/checkToken.js"></script>
+<script src="scripts/globalUrl.js"></script>
+<script src="scripts/jquery/jquery.min.js"></script>
+<script src="scripts/jquery-weui.min.js"></script>
+<script>
+    $( function () {
+
+
+        var userId   = undefined;
+        var meetingId = "";
+        function getUserList ( callback ) {
+
+            $.ajax( {
+                url    : globalUrl.globalUrl + "admin/users",
+                method : "GET",
+                headers: {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                success: function ( data ) {
+
+                    if ( data[ "errno" ] !== "0" ) {
+                        alert( data[ "errmsg" ] );
+                        callback( false );
+                    }
+
+                    var dataList = data[ "userlist" ];
+
+                    page(dataList, 19, function ( wrapArr ) {
+                        //根据长度决定遍历几次生成几页  如果分了十几二十页 怎么处理
+                        for( let i = 0; i < wrapArr.length; i++ ) {
+                            //""生成页索引
+                            let tempDataP = "<p class='page-user' data=" + i + "> " + (i + 1) + " </p>"
+                            $( ".page-footer" ).append( tempDataP );
+                        }
+
+                        $(".page-user").eq(0).css("color","#fff");
+                        $(".page-user").click(function () {
+                            $(this).css("color", "#fff").siblings("p").css("color","#000")
+                        });
+
+                        var tempRow = "";
+                        for ( let i = 0; i < wrapArr[0].length; i++ ) {
+
+                            tempRow =
+                                    "<tr class='click-tr' data='id" +  wrapArr[0][ i ][ "id" ] + "'>" +
+                                    "    <td>" +  wrapArr[0][ i ][ "flag" ] + "</td>" +
+                                    "    <td>" +  wrapArr[0][ i ][ "username" ] + "</td>" +
+                                    "    <td>" +  wrapArr[0][ i ][ "identity_num" ] + "</td>" +
+                                    "    <td>" +  wrapArr[0][ i ][ "birthday" ] + "</td>" +
+                                    "    <td>" +  wrapArr[0][ i ][ "mobile" ] + "</td>" +
+                                    "    <td>" +  wrapArr[0][ i ][ "email" ] + "</td>" +
+                                    "</tr>";
+
+                            $( "#tab" ).append( tempRow );
+                        }
+
+
+                        //点击页数  耦合有点严重 不应该在这里定义事件同时使用wrapArr
+                        $(".page-footer>p").click(function () {
+
+                            var pageData = wrapArr[ $(this).attr("data") ]; //点击页的数据
+
+                            //clearRow
+                            $( ".click-tr" ).remove();
+                            //根据索引 替换
+
+                            var tempRow = "";
+
+                            for ( var i = 0; i < pageData.length; i++ ) {
+
+                                tempRow =
+                                    "<tr class='click-tr' data='id" +  pageData[ i ][ "id" ] + "'>" +
+                                    "    <td>" +  pageData[ i ][ "flag" ] + "</td>" +
+                                    "    <td>" +  pageData[ i ][ "username" ] + "</td>" +
+                                    "    <td>" +  pageData[ i ][ "identity_num" ] + "</td>" +
+                                    "    <td>" +  pageData[ i ][ "birthday" ] + "</td>" +
+                                    "    <td>" +  pageData[ i ][ "mobile" ] + "</td>" +
+                                    "    <td>" +  pageData[ i ][ "email" ] + "</td>" +
+                                    "</tr>";
+
+                                $( "#tab" ).append( tempRow );
+                            }
+                            //如果下一页了，这个就失效 需要重新定义
+                            clickRow( dataList );
+                        });
+
+                        callback( dataList );
+                    })
+
+                },
+                error  : function () {
+                    alert( "无法连接服务器" );
+                    callback( false );
+                }
+
+            } );
+
+
+        };
+
+
+
+        getUserList( function ( dataList ) {
+
+            if( !dataList ){
+                return;
+            }
+
+            //这个文件有点特殊 必须callback一个dataList
+            //弹出详细信息
+           clickRow( dataList );
+
+        });
+
+
+        //点击每一行
+        function clickRow (  dataList ) {
+
+            $( ".click-tr" ).click( function () {
+
+                $( ".alert-info" ).removeClass( "hide" );
+
+                var self = $( this );
+                userId   = self.attr( "data" ).slice( 2 );
+                var msg  = dataList[ Number( self.children().eq( 0 ).html() ) - 1 ];
+
+                $( "#province" ).val( msg[ "province" ] );
+                $( "#city" ).val( msg[ "city" ] );
+                $( "#address" ).val( msg[ "address" ] );
+                $( "#birthday" ).val( msg[ "birthday" ] );
+                $( "#department" ).val( msg[ "department" ] );
+                $( "#email" ).val( msg[ "email" ] );
+                $( "#executive_post" ).val( msg[ "executive_post" ] );
+                $( "#gender" ).val( msg[ "gender" ] === "MAN" ? "男" : "女" );
+                $( "#hight_degree" ).val( msg[ "hight_degree" ] );
+                $( "#identity_num" ).val( msg[ "identity_num" ] );
+                $( "#identity_type" ).val( msg[ "identity_type" ] );
+                $( "#mobile" ).val( msg[ "mobile" ] );
+                $( "#office_tel" ).val( msg[ "office_tel" ] );
+                $( "#resume" ).val( msg[ "resume" ] );
+                $( "#spellname" ).val( msg[ "spellname" ] );
+                $( "#technical_title" ).val( msg[ "technical_title" ] );
+                $( "#username" ).val( msg[ "username" ] );
+                $( "#work_addr" ).val( msg[ "work_addr" ] );
+
+            } );
+
+
+
+        };
+
+
+        $( ".quit" ).click( function () {
+
+            $( ".alert-info" ).addClass( "hide" );
+            $( ".alert-record" ).addClass( "hide" );
+            $( ".alert-record-detail" ).addClass( "hide" );
+
+        });
+
+        $( ".quit_record" ).click( function () {
+
+            $( ".alert-record" ).addClass( "hide" );
+
+        });
+
+        $(".alert-record-mask").click(function () {
+            $( ".alert-record" ).addClass( "hide" );
+
+        });
+
+        $( ".quit_record-detail" ).click( function () {
+
+            $( ".alert-record-detail" ).addClass( "hide" );
+            $( ".alert-record" ).addClass( "hide" );
+
+        });
+        $( ".alert-detail-mask" ).click( function () {
+
+            $( ".alert-record-detail" ).addClass( "hide" );
+            $( ".alert-record" ).removeClass( "hide" );
+
+        });
+         $( ".alert-center-mask" ).click( function () {
+             $( ".alert-info" ).addClass( "hide" );
+
+         });
+
+
+
+        //获取用户参加记录
+        function getUserJoinMeetings ( callback ) {
+
+            //查看用户记录
+            $( ".get_meetings" ).click(function () {
+
+                $( ".alert-record" ).removeClass( "hide" );
+                //$( ".alert-info" ).addClass( "hide" );
+
+                $.ajax( {
+                    url    : globalUrl.globalUrl + "admin/users/" + userId + "/meetings",
+                    method : "GET",
+                    headers: {
+                        "Authorization": window.sessionStorage.getItem( "token" )
+                    },
+                    success: function ( data ) {
+
+                        if ( data[ "errno" ] !== "0" ) {
+                            alert( data[ "errmsg" ] );
+                            callback( false );
+                        }
+
+                        var dataList = data[ "meetings" ];
+
+                        page( dataList, 19, function ( wrapArr ) {
+                            let tempDataP = "";
+
+                            if( wrapArr[0].length !== 0 ){
+                                for( let i = 0; i < wrapArr.length; i++ ) {
+                                    //""生成页索引
+                                    tempDataP += "<p class='page-item' data=" + i + "> " + (i + 1) + " </p>";
+                                }
+                                $( ".record-page-footer" ).html( tempDataP );
+                                $(".page-item").eq(0).css("color","red");
+                                $(".page-item").click(function () {
+                                    $(this).css("color", "red").siblings("p").css("color","#fff")
+                                });
+
+                            }else{
+                                tempDataP = "<span style='white-space: nowrap;color:#fff;'>无数据</span>";
+                                $( ".record-page-footer" ).html( tempDataP );
+                            }
+
+                            //加载第一页
+                            var tempRow     = "";
+                            for ( let i = 0; i < wrapArr[0].length; i++ ) {
+
+                                tempRow += "<div  data=" +wrapArr[0][i]["id"]+ " class='record-row'>" +
+                                    "       <p>"+ wrapArr[0][ i ][ "flag" ] +" </p>" +
+                                    "       <p> "+wrapArr[0][i]["title"]+" </p>" +
+                                    "       <p>"+wrapArr[0][i]["id"]+" </p>" +
+                                    "   </div>";
+                            }
+                            let tempTitle = '<div class="record-row"><p>序号</p><p>会议标题</p><p>会议ID</p></div>';
+                            $(".alert-record-center").html( tempTitle + tempRow );
+
+                            //点击页数  耦合有点严重 不应该在这里定义事件同时使用wrapArr
+                            $(".record-page-footer>p").click(function () {
+                                var pageData = wrapArr[ $(this).attr("data") ]; //点击页的数据
+                                //clearRow
+                                $(".alert-record-center").html();
+                                //根据索引 替换
+
+                                var tempRow = "";
+                                for ( var i = 0; i < pageData.length; i++ ) {
+
+                                    tempRow += "<div  data=" +pageData[i]["id"]+ " class='record-row'>" +
+                                        "       <p>会议序号: "+ pageData[ i ][ "flag" ] +" </p>" +
+                                        "       <p>会议ID: "+pageData[i]["id"]+" </p>" +
+                                        "       <p> "+pageData[i]["title"]+" </p>" +
+                                        "   </div>";
+                                }
+                                $(".alert-record-center").html( tempRow );
+
+                                //如果下一页了，这个就失效 需要重新定义
+                                clickRow( dataList );
+                            });
+
+                        });
+                        callback (true);
+
+                    },
+                    error  : function () {
+                        alert( "无法连接服务器" );
+                        callback( false );
+                    }
+
+                } );
+
+            });
+        };
+
+        getUserJoinMeetings( function ( tf ) {
+
+            if( !tf ){
+                return;
+            }
+            //点击每一行会议记录
+            $(".record-row").click(function () {
+                var self = $(this);
+                $(".alert-record").addClass( "hide" );
+                $(".alert-record-detail").removeClass( "hide" );
+                meetingId = self.attr( "data" );
+
+                $.ajax({
+                    url    : globalUrl.globalUrl + "admin/users/" + userId + "/meetings/" + meetingId,
+                    method : "GET",
+                    headers: {
+                        "Authorization": window.sessionStorage.getItem( "token" )
+                    },
+                    success: function ( data ) {
+
+                        /*
+                        {
+                          "errmsg": "获取参加会议详细信息成功",
+                          "errno": "0",
+                          "user_meeting": {
+                            "attend_status": "",  // 参加状态
+                            "checkin_status": "",  // 入住状态
+                            "hotel_title": "万达嘉华酒店2222",
+                            "is_eat": false,  // 是否就餐
+                            "is_pay": false,  // 是否支付
+                            "is_print": false,  // 是否打印
+                            "money": 300.24,
+                            "pay_num": "20181119184539000000024",  // 支付号
+                            "pay_type": null,  // 支付方式
+                            "speech_title": null,  // 演讲题目
+                            "way": ""  // 报名途径
+                          }
+                        }
+                        */
+
+                        if( data["errno"] !== "0" ){
+
+                            alert("errno: " + data[ "errmsg" ] );
+                            return;
+                        }
+
+                        var dataList     = data[ "user_meeting" ];
+
+                        $( "#attend_status" ).val( dataList[ "attend_status" ] )
+                        $( "#checkin_status" ).val( dataList[ "checkin_status" ] )
+                        $( "#hotel_title" ).val( dataList[ "hotel_title" ] )
+                        $( "#is_eat" ).val( dataList[ "is_eat" ] ? "是" : "否" )
+                        $( "#is_pay" ).val( dataList[ "is_pay" ] ? "是" : "否" )
+                        $( "#is_print" ).val( dataList[ "is_print" ] ? "是" : "否" )
+                        $( "#money" ).val( dataList[ "money" ] )
+                        $( "#pay_num" ).val( dataList[ "pay_num" ] )
+                        $( "#pay_type" ).val( dataList[ "pay_type" ] ? " " : dataList[ "pay_type" ] )
+                        $( "#speech_title" ).val( dataList[ "speech_title" ] ? " " : dataList[ "speech_title" ] )
+                        $( "#way" ).val( dataList[ "way" ] )
+
+                        return;
+                    },
+
+                    error : function (  ) {
+                        alert( "无法连接服务器" );
+                        return;
+                    }
+
+
+                })
+            });
+
+        });
+
+        //确认修改用户参加的会议信息
+        $(".alert-btn-re").click(function () {
+
+            $.ajax({
+                url    : globalUrl.globalUrl + "admin/users/" + userId + "/meetings/" + meetingId,
+                type : "PUT",
+                contentType: "application/json",
+                headers: {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                data: JSON.stringify({
+
+                    "attend_status" : $( "#attend_status" ).val(),
+                    "checkin_status": $( "#checkin_status" ).val(),
+                    "hotel"         : $( "#hotel_title" ).val(),
+                    "is_eat"        : $( "#is_eat" ).val()==="否"?"NOEAT":"EAT",
+                    "is_pay"        : $( "#is_pay" ).val()==="否"?"NOPAY":"PAY",
+                    "is_print"      : $( "#is_print" ).val()==="否"?"NOPRINT":"PRINT",
+                    "way"           : $( "#way" ).val(),
+                }),
+
+                success: function ( data ) {
+
+                    if( data["errno"] !== "0" ){
+
+                        alert("errno: " + data[ "errmsg" ] );
+                        return;
+                    }
+
+                    alert(data[ "errmsg" ]);
+                    //关闭遮罩
+                    $( ".alert-record-detail" ).addClass( "hide" );
+                    $( ".alert-record" ).addClass( "hide" );
+
+                    return;
+
+                },
+
+                error : function (  ) {
+                    alert( "无法连接服务器" );
+                    return;
+                }
+
+
+            })
+
+
+
+
+        })
+
+
+        //删除
+        $(".btn").click(function () {
+
+            if( !userId ){
+                alert( "获取userId 失败!" );
+                return;
+            }
+
+            $.confirm({
+                title: '警告',
+                text: '是否确认删除',
+                onOK: function () {
+                    //点击确认
+                    $.ajax({
+                        url        :globalUrl.globalUrl + "admin/users/" + userId,
+                        type       : "delete",
+                        contentType: "application/json",
+                        headers    : {
+                            "Authorization": window.sessionStorage.getItem( "token" )
+                        },
+                        success:function(msg){
+
+                            if(msg["errno"] !== "0" ){
+                                alert( msg["errmsg"] );
+                                return;
+                            }
+                            $.alert({
+                                title: '提示',
+                                text: msg["errmsg"],
+                                onOK: function () {
+                                    //点击确认
+                                    window.location.href = "./userManager.html";
+                                }
+                            });
+
+                            //需要刷新一下页面
+                        },
+                        error:function(xhr,textstatus,thrown){
+                            $.alert({
+                                title: '提示',
+                                text: "无法连接服务器",
+                                onOK: function () {
+                                    //点击确认
+                                    window.location.href = "./userManager.html";
+                                }
+                            });
+                        }
+                    });
+
+                },
+                onCancel: function () {
+                }
+            });
+
+        });
+
+        var data = [
+            $( "#username" ),
+            $( "#spellname" ),
+            $( "#gender" ),
+            $( "#department" ),
+            $( "#identity_num" ),
+            $( "#mobile" ),
+            $( "#email" ),
+            $( "#birthday" ),
+            $( "#hight_degree" ),
+            $( "#province" ),
+            $( "#city" ),
+            $( "#address" ),
+            $( "#work_addr" ),
+            $( "#executive_post" ),
+
+        ];
+
+        //修改
+        $(".btn1").click(function () {
+
+            if( !userId ){
+                alert( "获取userId 失败!" );
+                return;
+            }
+
+            for( var i = 0;i< data.length; i++ ){
+                if( !data[i].val().trim() ){
+                    heightLine( data[i] );
+                    return;
+                }
+            }
+
+            if( checkPhone( $( "#mobile" ).val() ) ){
+                heightLine( $( "#mobile" ) );
+                return;
+            }
+
+            if( checkEmail( $( "#email" ).val() ) ){
+                heightLine(  $( "#email" ) );
+                return;
+            }
+
+            if(  $( "#gender" ).val() !== "男" &&  $( "#gender" ).val() !== "女" ) {
+                heightLine( $( "#gender" ) );
+                return;
+            }
+
+
+            $.confirm({
+                title: '提示',
+                text: '是否确认修改',
+                onOK: function () {
+                    //点击确认
+                    $.ajax({
+                        url        :globalUrl.globalUrl + "admin/users/" + userId,
+                        type       : "PUT",
+                        contentType: "application/json",
+                        headers    : {
+                            "Authorization": window.sessionStorage.getItem( "token" )
+                        },
+                        data       : JSON.stringify( {
+                            "username"       : $( "#username" ).val(),
+                            "spellname"      : $( "#spellname" ).val(),
+                            "gender"         : $( "#gender" ).val()==="男"?"man":"woman",
+                            "department"     : $( "#department" ).val(),
+                            "identity_num"   : $( "#identity_num" ).val(),
+                            "mobile"         : $( "#mobile" ).val(),
+                            "email"          : $( "#email" ).val(),
+                            "birthday"       : $( "#birthday" ).val(),
+                            "hight_degree"   : $( "#hight_degree" ).val(),
+                            "province"       : $( "#province" ).val(),
+                            "city"           : $( "#city" ).val(),
+                            "address"        : $( "#address" ).val(),
+                            "work_addr"      : $( "#work_addr" ).val(),
+                            "technical_title": $( "#technical_title" ).val(),
+                            "executive_post" : $( "#executive_post" ).val(),
+                            "office_tel"     : $( "#office_tel" ).val(),
+                            "resume"         : $( "#resume" ).val(),
+                            "identity_type"  : "身份证"
+                        } ),
+                        success    : function ( msg ) {
+
+                            if(msg["errno"] !== "0" ){
+                                $.alert({
+                                    title: '错误',
+                                    text: msg["errmsg"],
+                                    onOK: function () {
+                                        //点击确认
+                                        //window.location.href = "./userManager.html";
+                                    }
+                                });
+                                return;
+                            }
+                            //$.alert(msg["errmsg"], "提示");
+                            $.alert({
+                                title: '提示',
+                                text: msg["errmsg"],
+                                onOK: function () {
+                                    //点击确认
+                                    window.location.href = "./userManager.html";
+                                }
+                            });
+
+                            //需要刷新一下页面
+                        },
+                        error:function(xhr,textstatus,thrown){
+                            $.alert({
+                                title: '提示',
+                                text: "无法连接服务器",
+                                onOK: function () {
+                                    //点击确认
+                                    window.location.href = "./userManager.html";
+                                }
+                            });
+                        }
+                    });
+
+                },
+                onCancel: function () {
+                }
+            });
+
+        });
+
+        /*
+      dataList:分页的源数据格式
+      * [{},{},{},{}]
+      *
+      * return wrapArr: 格式化成分页
+      *    [ [{},{} ],[ {}, {} ,{}], ]
+      */
+        function page ( dataList, row, callback ) {
+            var wrapArr = [];
+            var tempVal = 0;
+            var tempArr = [];
+
+            for ( let k = 0; k< dataList.length; k++ ) {
+
+                if( tempVal > row){
+                    wrapArr.push(tempArr);
+                    tempArr = [];
+                    tempVal = 0;
+                }
+
+                dataList[k].flag = (k + 1 );
+                tempArr.push( dataList[k] );
+                tempVal ++;
+            }
+            wrapArr.push(tempArr);
+            callback( wrapArr );
+        };
+
+
+        function heightLine ( self ) {
+
+            self.css( "background", "red" );
+            self.css( "color", "#fff" );
+        }
+
+        function checkPhone( phoneNum ) {
+
+            if ( !(/^1[34578]\d{9}$/.test( phoneNum )) ) {
+
+                return "手机号码有误";
+            }
+        };
+
+        function checkEmail( str ) {
+            var re = /^[A-Za-z\d]+([-_.][A-Za-z\d]+)*@([A-Za-z\d]+[-.])+[A-Za-z\d]{2,4}$/;
+
+            if ( !re.test( str ) ) {
+                return "请输入正确邮箱";
+            }
+        };
+
+
+    } )
+</script>
+</body>
+</html>

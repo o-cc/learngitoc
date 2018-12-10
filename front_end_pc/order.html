@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+    <title>缴费</title>
+    <link rel="stylesheet" href="css/weui.min.css">
+    <link rel="stylesheet" href="css/jquery-weui.min.css">
+    <link rel="stylesheet" href="css/globalCss.css">
+    <link rel="stylesheet" href="css/order.css">
+</head>
+<body>
+
+<div class="detail-info">
+    <div class="header-title">
+        <p id="detail-title">缴费信息</p>
+    </div>
+
+    <div class="active-info">
+        <div class="active-center">
+            <p style="padding: 1rem 3rem;" id="cost-info"></p>
+        </div>
+
+        <div class="bottom-btns" style="background: #fff" id="show-hotel">
+            <label class="weui-cell weui-check__label">
+                <div class="weui-cell__bd">
+                    <p style="color: #ff6700; font-size: 1.5rem;">查看酒店信息</p>
+                </div>
+                <div class="weui-cell__ft">
+                    <span style="font-size: 2rem;margin-right: 1rem;">></span>
+                </div>
+            </label>
+        </div>
+
+        <div class="bottom-btns">
+            <p>请选择支付方式：</p>
+            <div class="weui-cells weui-cells_radio">
+                <div class="pay-way" data="1">
+                    <label class="weui-cell weui-check__label" for="x11">
+                        <div class="weui-cell__bd">
+                            <p>支付宝支付</p>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <input type="radio" class="weui-check" name="radio1" id="x11">
+                            <span class="weui-icon-checked" id="oc"></span>
+                        </div>
+                    </label>
+                </div>
+
+                <div class="pay-way" data="2">
+                    <label class="weui-cell weui-check__label" for="x12">
+                        <div class="weui-cell__bd">
+                            <p>现场缴费</p>
+                        </div>
+                        <div class="weui-cell__ft">
+                            <input type="radio" name="radio1" class="weui-check" id="x12">
+                            <span class="weui-icon-checked"></span>
+                        </div>
+                    </label>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="bottom-btns">
+            <div>
+                <a href="javascript:;" style="background: #ff6700" class="weui-btn weui-btn_primary" id="confrim">确定</a>
+            </div>
+            <div>
+                <a style="background: #0050ffc9" class="weui-btn weui-btn_primary go_back">返回</a>
+            </div>
+        </div>
+    </div>
+
+</div >
+
+
+<div class="hotel-info hide">
+    <div class=" hotel-info-items" style="width: 100%;" id="">
+        <!--添加酒店-->
+    </div>
+</div>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/jquery-weui.min.js"></script>
+<script src="js/globalUrl.js"></script>
+<script src="js/order.js"></script>
+</body>
+</html>

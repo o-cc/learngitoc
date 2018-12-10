@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: rgba(0, 0, 0, .5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center {
+            width: 50%;
+            height: 50%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center > div {
+            flex: 1;
+        }
+
+        .but {
+            position: relative;
+            width: 80%;
+            height: 20%;
+            margn: 0 auto;
+            background-color: #ff6700;
+            text-align: center;
+            line-height: 2.1em;
+            font-size: 1.5em;
+            cursor: pointer;
+
+        }
+
+        .index-img {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+
+        }
+
+        .cen-top {
+            /*width: 100%;*/
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ccc;
+        }
+
+        #gallery {
+            width: 50%;
+        }
+
+        .cen-bom {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="center">
+    <div class="cen-top">
+        <img src="" id="gallery" alt="">
+    </div>
+    <div class="cen-bom">
+
+        <div class="but">
+            <input type="file" id="image" class="index-img" accept="image/*" multiple>
+            选择图片
+        </div>
+        <div class="but" id="postImg" style="margin-top: 5%;">
+            <!--<input type="file" id="image" class="index-img" accept="image/*" multiple>-->
+            上传图片
+        </div>
+
+    </div>
+
+</div>
+
+<script src="scripts/checkToken.js"></script>
+<script src="scripts/lrz.js"></script>
+<script src="scripts/globalUrl.js"></script>
+<script src="scripts/jquery/jquery.min.js"></script>
+<script>
+
+    $( function () {
+
+        let imgFile = "";
+        $( "#image" ).change( function () {
+
+            lrz( this.files[ 0 ], {
+                width: 600 //设置压缩参数
+            } ).then( function ( rst ) {
+                /* 处理成功后执行 */
+                //console.log( rst.base64 );
+                $( "#gallery" ).attr( "src", rst.base64 );
+
+            } ).catch( function ( err ) {
+                /* 处理失败后执行 */
+                console.log( err );
+                $.toast( "图片选取失败,请重试", "forbidden" );
+            } )
+
+        } )
+
+        $( "#postImg" ).click( function () {
+
+            if(  !$( "#gallery" ).attr( "src") ) {
+                alert( "请选择图片" );
+                return;
+            }
+
+
+            $.ajax({
+
+                url: globalUrl.globalUrl + "homepages",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "home_img" : $( "#gallery" ).attr( "src")
+                }),
+
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                success: function ( data ) {
+
+                    if( data["errno"] !== "0" ) {
+                        alert(data["errmsg"] );
+                        return;
+                    }
+
+                    alert( data["errmsg"] );
+                    $( "#gallery" ).attr( "src", "");
+                    return;
+                },
+                error: function () {
+                    alert("无法连接服务器");
+                    return;
+                }
+
+
+            })
+
+        } );
+
+    } )
+
+</script>
+</body>
+</html>

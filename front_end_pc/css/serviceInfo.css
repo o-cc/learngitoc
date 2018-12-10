@@ -1,0 +1,143 @@
+@media screen and (min-width: 768px) {
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(221, 221, 221, .2);
+    }
+    .detail-info {
+        width: 768px;
+        margin: 0 auto;
+    }
+
+    .all-wrap{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header-title {
+        width: 100%;
+    }
+
+    .header-title > p {
+        padding: 1rem 1rem 0.5rem 1rem;
+        color: #666;
+        font-size: 1.8rem;
+    }
+
+    .active-info {
+        width: 100%;
+    }
+
+    .active-center {
+        width: 100%;
+        margin: 0 auto;
+        background-color: #fff;
+    }
+
+
+    .bottom-btns {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bottom-btns > div{
+        flex: 1;
+    }
+
+    .back-btn{
+        display: flex;
+        margin-top: 2rem;
+        justify-content: space-around;
+    }
+
+    .back-btn>p {
+        width: 45%;
+    }
+
+    .weui-cell__ft {
+        font-size: 0.8rem;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .hide {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    html, body {
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0;
+        background-color: rgba(221, 221, 221, .2);
+    }
+
+    .all-wrap{
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header-title {
+        width: 100%;
+    }
+
+    .header-title > p {
+        padding: 1rem 1rem 0.5rem 1rem;
+        color: #666;
+        font-size: 1.8rem;
+    }
+
+    .active-info {
+        width: 100%;
+    }
+
+    .active-center {
+        width: 90%;
+        margin: 0 auto;
+        background-color: #fff;
+    }
+
+
+    .bottom-btns {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bottom-btns > div{
+        flex: 1;
+    }
+
+    .back-btn{
+        display: flex;
+        margin-top: 2rem;
+        justify-content: space-around;
+    }
+
+    .back-btn>p {
+        width: 45%;
+    }
+
+    .weui-cell__ft {
+        font-size: 0.8rem;
+    }
+
+    .show {
+        display: block;
+    }
+
+    .hide {
+        display: none;
+    }
+}
