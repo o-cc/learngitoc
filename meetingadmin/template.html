@@ -22,19 +22,76 @@
     </div>
     <button id="upload">获取数据</button>
 
+<script src="scripts/checkToken.js"></script>
+<script src="scripts/globalUrl.js"></script>
 <script src="./scripts/wangEditor.min.js"></script>
-<script src="./scripts/jquery.min.js"></script>
+<script src="./scripts/jquery/jquery.min.js"></script>
 <script type="text/javascript">
 
+console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
 
-    var E = window.wangEditor
+    var E = window.wangEditor;
     var editor1 = new E('#div1', '#div2');
     editor1.create();
     document.getElementById("upload").onclick = function (){
         editor1.txt.html();
+            $.ajax({
+                url: globalUrl.globalUrl + "admin/modules/" + loadPageVar("moduleId") + "/meeting" + loadPageVar("meetingId"),
+                method: "POST",
+                contentType: "application/json",
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                data: JSON.stringify({
+                    "image" : moduleBase64,
+                    "title" : $("#module-name").val().trim(),
+                    "next_href": $("#module-link").val().trim(),
+                    "meeting_id": meetingId,
+                    "sort": $("#module-sort").val(),
+                }),
+                success: function ( data ) {
+                    /*
+                    * {
+                        'image': 'base64;//frmmregm',
+                        'title': '参加会议',
+                        'sort': 1,
+                        'next_href': 'http://127.0.0.1:8080/serviceInfo.html',
+                        'meeting_id': 6
+                    }
+                    * */
+                    if( data["errno"]  !== "0" ){
 
-        
+                        alert(data["errmsg"]);
+                        return;
+                    }
+
+                    alert(data["errmsg"]);
+                    $(".alert-module").addClass( "hide" );
+                    $("#module-name").val("");
+                    $("#module-link").val("");
+                    $("#module-sort").val("");
+                    $("#module-pic").val("");
+                    moduleBase64 = "";
+
+                },
+                error: function (err ) {
+                    alert( "添加模块无法链接服务器" );
+                    return;
+
+                }
+
+    })
+
+}
+
+    //获取URL参数
+    /*
+    * param1 { String } 参数名
+    * */
+    function loadPageVar( sVar ) {
+        return decodeURI( window.location.search.replace( new RegExp( "^(?:.*[&\\?]" + encodeURI( sVar ).replace( /[\.\+\*]/g, "\\$&" ) + "(?:\\=([^&]*))?)?.*$", "i" ), "$1" ) );
     }
+
 
 </script>
 </body>

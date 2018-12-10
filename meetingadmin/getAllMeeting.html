@@ -155,11 +155,10 @@
         .alert-module-info-center > div > div {
             flex: 1;
             border: 1px solid #fff;
-            padding-left: 1em;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size:  1em;
+            font-size:  .5em;
         }
 
         .alert-module-info-center > div > div input {
@@ -178,7 +177,7 @@
             font-size: 20px;
         }
 
-        .change-module, .delete-module {
+        .change-module, .delete-module, .editor-module {
             margin: 0 auto;
             width: 40%;
             height: 90%;
@@ -187,6 +186,8 @@
             color: #fff;
             font-size: 20px;
             cursor: pointer;
+            white-space: nowrap;
+            border-right: 1px solid #fff;
         }
 
         .click-tr {
@@ -654,6 +655,7 @@
                                 '            <div>\n' +
                                 '                <button class="change-module" data=' + moduleList[ i ][ "module_id" ] + '>修改</button>\n' +
                                 '                <button class="delete-module" data=' + moduleList[ i ][ "module_id" ] + '>删除</button>\n' +
+                                '                <a class="editor-module" target="_blank" href="./template.html?moduleId=' + moduleList[ i ][ "module_id" ] + '&meetingId='+meetingId+'" data=' + moduleList[ i ][ "module_id" ] + '>编辑</a>\n' +
                                 '            </div>\n' +
                                 '        </div>';
                         }
