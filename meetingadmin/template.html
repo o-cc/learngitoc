@@ -28,15 +28,13 @@
 <script src="./scripts/jquery/jquery.min.js"></script>
 <script type="text/javascript">
 
-console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
-
     var E = window.wangEditor;
     var editor1 = new E('#div1', '#div2');
     editor1.create();
     document.getElementById("upload").onclick = function (){
        
             $.ajax({
-                url: globalUrl.globalUrl + "admin/modules/" + loadPageVar("moduleId") + "/meeting" + loadPageVar("meetingId"),
+                url: globalUrl.globalUrl + "admin/modules/" + loadPageVar("moduleId") + "/meetings/" + loadPageVar("meetingId"),
                 method: "POST",
                 contentType: "application/json",
                 headers    : {
@@ -46,15 +44,7 @@ console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
                    "content":  editor1.txt.html()
                 }),
                 success: function ( data ) {
-                    /*
-                    * {
-                        'image': 'base64;//frmmregm',
-                        'title': '参加会议',
-                        'sort': 1,
-                        'next_href': 'http://127.0.0.1:8080/serviceInfo.html',
-                        'meeting_id': 6
-                    }
-                    * */
+
                     console.log( data );
                     if( data["errno"]  !== "0" ){
 
@@ -63,12 +53,6 @@ console.log( loadPageVar("moduleId"),loadPageVar("meetingId")) ;
                     }
 
                     alert(data["errmsg"]);
-                    $(".alert-module").addClass( "hide" );
-                    $("#module-name").val("");
-                    $("#module-link").val("");
-                    $("#module-sort").val("");
-                    $("#module-pic").val("");
-                    moduleBase64 = "";
 
                 },
                 error: function (err ) {
