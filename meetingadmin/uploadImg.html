@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        html, body {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+            background-color: rgba(0, 0, 0, .4);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center {
+            width: 50%;
+            height: 50%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .center > div {
+            flex: 1;
+        }
+
+        .but {
+            position: relative;
+            width: 80%;
+            height: 3em;
+            margn: 0 auto;
+            background-color: #ff6700;
+            text-align: center;
+            line-height: 3em;
+            font-size: 1.5em;
+            cursor: pointer;
+
+        }
+
+        .index-img {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+
+        }
+
+        .cen-top {
+            /*width: 100%;*/
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #ccc;
+        }
+
+        #gallery {
+            width: 50%;
+        }
+
+        .cen-bom {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hide{
+            display: none;
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .tab {
+            width: 100%;
+            font-size: 1em;
+            border-collapse: collapse;
+        }
+
+        .tab tr:first-child {
+            color: #000;
+        }
+
+        .tab tr:nth-child(2n-1) {
+            background-color: #aaa;
+        }
+
+        .tab tr:nth-child(2n) {
+            background-color: #ccc;
+        }
+
+        .tab td {
+            min-width: 150px;
+            height: 3em;
+            text-align: center;
+            border: 1px solid #fff;
+
+        }
+        
+        .page-footer{
+            width: 100%;
+            height:2.5em;
+            background-color: #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page-footer > p {
+            width: 2em;
+            height: 2em;
+            line-height: 2em;
+            text-align: center;
+            margin-right: .5em;
+            cursor: pointer;
+        }
+        
+        .uploadImg, .image-list {
+            width: 10em;
+            height:3em;
+            font-size: 1em;
+            color: #fff;
+            cursor: pointer;
+            background-color: #ff6700;
+        }
+
+        .image-list {
+            width: 10em;
+        }
+
+        .abso-list {
+            position: absolute;
+            top: -25%;
+            right: 0%;
+        }
+
+    </style>
+</head>
+<body>
+<div class="center list" style="display: table;width: 80%;height: 80%;background: none;">
+    <div style="margin-bottom: 1.5em;text-align: right;">
+        <button class="uploadImg">图片上传</button>
+    </div>
+    <table class="tab" id="tab">
+
+
+    </table>
+    <div class="page-footer">
+
+    </div>
+
+
+</div>
+
+
+<div class="center upload hide" style="position: relative;">
+    <div class="abso-list" style="margin-bottom: 1.5em;text-align: right;">
+        <button class="image-list">查看列表</button>
+    </div>
+    <div class="cen-top">
+        <img src="" id="gallery" alt="">
+    </div>
+    <div class="cen-bom">
+
+        <div class="but">
+            <input type="file" id="image" class="index-img" accept="image/*" multiple>
+            选择图片
+        </div>
+        <div class="but" id="postImg" style="margin-top: 5%;">
+            <!--<input type="file" id="image" class="index-img" accept="image/*" multiple>-->
+            上传图片
+        </div>
+
+    </div>
+
+</div>
+
+<script src="scripts/checkToken.js"></script>
+<script src="scripts/lrz.js"></script>
+<script src="scripts/globalUrl.js"></script>
+<script src="scripts/jquery/jquery.min.js"></script>
+<script>
+
+    $( function () {
+
+
+
+
+        //请求一次
+        getImgCallback();
+
+        $(".image-list").click(function () {
+            $(".upload").addClass( "hide" ).removeClass( "flex" );
+            $(".list").css( "display","table" );
+            getImgCallback();
+        });
+
+        function getImgCallback () {
+            getImg( function ( dataList ){
+
+                if( !dataList ){
+                    return;
+                }
+
+                //[ [{},{} ],[ {}, {} ,{}], ]
+                page( dataList ,9, function ( wrapArr ) {
+
+                    if( wrapArr[0].length !== 0 ){
+
+                        let tempDataP = "";
+                        for( let i = 0; i < wrapArr.length; i++ ) {
+                            //""生成页索引
+                            tempDataP += "<p data=" + i + "> " + (i + 1) + " </p>"
+                        }
+                        $( ".page-footer" ).html( tempDataP );
+
+
+                        //加载第一页
+                        var tempRow = " <tr>\n" +
+                            "            <td>序号</td>\n" +
+                            "            <td>图片地址</td>\n" +
+                            "            <td></td>\n" +
+                            "        </tr>";
+                        for ( let i = 0; i < wrapArr[0].length; i++ ) {
+
+                            tempRow +=
+                                "<tr class='click-tr' data='id" + wrapArr[0][ i ][ "id" ] + "'>" +
+                                "    <td>"+ (i+1) +"</td>" +
+                                "    <td><a target='_blank' href="+wrapArr[0][ i ][ "url" ]+">"+wrapArr[0][ i ][ "url" ]+"</a></td>" +
+                                "    <td><button class='delete'  data=" + wrapArr[0][ i ][ "id" ] + " style='width: 90%;height:3.5em;background: #ff6700; color: #fff;'>删除</button></td>" +
+                                "</tr>";
+
+                        }
+
+                        $( "#tab" ).html( tempRow );
+
+
+                        //点击页数
+                        $(".page-footer>p").click(function () {
+                            //clearRow
+                            $( ".click-tr" ).remove();
+                            //根据索引 替换
+                            let pageData = wrapArr[ $(this).attr("data") ];
+                            var tempRow = "";
+                            for ( let i = 0; i < pageData.length; i++ ) {
+
+                                tempRow =
+                                    "<tr class='click-tr' data='id" + pageData[ i ][ "id" ] + "'>" +
+                                    "    <td>"+ (i+1) +"</td>" +
+                                    "    <td><a target='_blank' href="+pageData[ i ][ "url" ]+">"+pageData[ i ][ "url" ]+"</a></td>" +
+                                    "    <td><button class='delete'  data=" + pageData[ i ][ "id" ] + " style='width: 90%;height:3.5em;background: #ff6700; color: #fff;'>删除</button></td>" +
+                                    "</tr>";
+
+                                $( "#tab" ).append( tempRow );
+                            }
+                        });
+
+                        $(".delete").click(function () {
+
+                            let self = $(this);
+                            $.ajax({
+
+                                url: globalUrl.globalUrl + "admin/images/" + self.attr("data"),
+                                method: "delete",
+                                headers    : {
+                                    "Authorization": window.sessionStorage.getItem( "token" )
+                                },
+                                success: function ( data ) {
+
+                                    if( data["errno"] !== "0" ) {
+                                        alert(data["errmsg"] );
+                                        return;
+                                    }
+
+                                    alert( data["errmsg"] );
+                                    window.location.href = "./uploadImg.html";
+                                },
+                                error: function () {
+                                    alert("无法连接服务器");
+                                }
+
+
+                            })
+
+                        });
+
+                    }else{
+                        let tempDataP = "<div> 无数据 </div>"
+                        $( ".page-footer" ).append( tempDataP );
+                    }
+
+
+                })
+
+            })
+        };
+
+        function getImg( callback ) {
+
+            $.ajax({
+
+                url: globalUrl.globalUrl + "admin/images",
+                method: "GET",
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                success: function ( data ) {
+
+                    if( data["errno"] !== "0" ) {
+                        alert(data["errmsg"] );
+                        callback( false );
+                    }
+                    callback( data["image_list"] );
+
+
+                },
+                error: function () {
+                    alert("无法连接服务器");
+                    callback ( false );
+                }
+
+
+            })
+
+        };
+        /*
+             dataList:分页的源数据格式
+             * [{},{},{},{}]
+             *
+             * return wrapArr: 格式化成分页
+             *    [ [{},{} ],[ {}, {} ,{}], ]
+             */
+        function page ( dataList, row, callback ) {
+            var wrapArr = [];
+            var tempVal = 0;
+            var tempArr = [];
+
+            for ( let k = 0; k< dataList.length; k++ ) {
+
+                if( tempVal > row){
+                    wrapArr.push(tempArr);
+                    tempArr = [];
+                    tempVal = 0;
+                }
+
+                dataList[k].flag = (k + 1 );
+                tempArr.push( dataList[k] );
+                tempVal ++;
+            }
+            wrapArr.push(tempArr);
+            callback( wrapArr );
+        };
+
+
+        $(".uploadImg").click(function () {
+            $(".upload").removeClass( "hide" ).addClass( "flex" );
+            $(".list").css( "display","none" );
+        });
+
+
+        let imgFile = "";
+        $( "#image" ).change( function () {
+
+            lrz( this.files[ 0 ], {
+                width: 600 //设置压缩参数
+            } ).then( function ( rst ) {
+                /* 处理成功后执行 */
+                //console.log( rst.base64 );
+                imgFile = rst.base64;
+                $( "#gallery" ).attr( "src", rst.base64 );
+
+            } ).catch( function ( err ) {
+                /* 处理失败后执行 */
+                console.log( err );
+                $.toast( "图片选取失败,请重试", "forbidden" );
+            } )
+
+        } )
+
+        $( "#postImg" ).click( function () {
+
+            if(  !$( "#gallery" ).attr( "src") ) {
+                alert( "请选择图片" );
+                return;
+            }
+
+
+            $.ajax({
+
+                url: globalUrl.globalUrl + "admin/images",
+                method: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    "image" : imgFile
+                }),
+                headers    : {
+                    "Authorization": window.sessionStorage.getItem( "token" )
+                },
+                success: function ( data ) {
+
+                    if( data["errno"] !== "0" ) {
+                        alert(data["errmsg"] );
+                        return;
+                    }
+
+                    alert( data["errmsg"] );
+                    $( "#gallery" ).attr( "src", "");
+
+                    return;
+                },
+                error: function () {
+                    alert("无法连接服务器");
+                    return;
+                }
+
+
+            })
+
+        } );
+
+    } )
+
+</script>
+</body>
+</html>

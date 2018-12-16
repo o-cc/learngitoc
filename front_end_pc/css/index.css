@@ -25,6 +25,7 @@
         width: 100%;
         height: 70%;
         display: flex;
+        background: #fff;
         align-items: center;
     }
 
@@ -45,8 +46,8 @@
     }
 
     .wrapBtn>a {
-        width: 30%;
-        height: 25%;
+        width: 26%;
+        height: 28%;
         text-decoration: none;
         display: flex;
         flex-direction: column;
@@ -58,7 +59,7 @@
     }
     
     .index-icon {
-        width: 75%;
+        width: 70%;
         -webkit-background-size: contain;
         background-size: contain;: ;
     }
@@ -67,7 +68,7 @@
         width: 100%;
         height: 11%;
         border-radius: 5px;
-        background-color: #0050ffc9;
+        background-color: #0050FF;
         margin-top: 3rem;
     }
 
@@ -109,6 +110,7 @@
         width: 100%;
         height: 70%;
         display: flex;
+        background-color: #fff;
         align-items: center;
     }
 
@@ -129,8 +131,8 @@
     }
 
     .wrapBtn>a {
-        width: 30%;
-        height: 25%;
+        width: 26%;
+        height: 28%;
         text-decoration: none;
         display: flex;
         flex-direction: column;
@@ -142,7 +144,7 @@
     }
 
     .index-icon {
-        width: 75%;
+        width: 70%;
         -webkit-background-size: contain;
         background-size: contain;: ;
     }
@@ -151,7 +153,7 @@
         width: 100%;
         height: 11%;
         border-radius: 5px;
-        background-color: #0050ffc9;
+        background-color: #0050FF;
         margin-top: 3rem;
     }
 

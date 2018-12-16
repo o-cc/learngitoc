@@ -66,7 +66,7 @@ $(function () {
                 var dataList = data[ "module_list" ];
 
                 for ( var i = 0; i < dataList.length; i++ ) {
-                    var  temp = '<a href='+ dataList[i][ "next_href" ]+"?meetingId="+ loadPageVar( "meetingId") +'>\n' +
+                    var  temp = '<a href='+ dataList[i][ "next_href" ]+"?moduleId="+dataList[i]["module_id"]+"&meetingId="+ loadPageVar( "meetingId") +'>\n' +
                         '           <img src=' +dataList[i][ "image" ]+ ' class="index-icon" alt="">\n' +
                         '           <p style="font-size: 1.3rem;margin-top: 0.5rem;">' +dataList[i][ "title" ] +'</p>\n' +
                         '        </a>';

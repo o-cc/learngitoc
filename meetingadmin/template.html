@@ -4,12 +4,22 @@
     <meta charset="UTF-8">
     <title>wangEditor</title>
     <style type="text/css">
+
         .toolbar {
             border: 1px solid #ccc;
         }
+
         .text {
             border: 1px solid #ccc;
             min-height: 400px;
+        }
+
+        .upload-btn {
+            width: 10em;
+            height: 3em;
+            color: #fff;
+            background-color: #ff6700;
+            margin: 10px;
         }
     </style>
 </head>
@@ -20,7 +30,7 @@
     <div id="div2" class="text"> 
         <p>请输入内容</p>
     </div>
-    <button id="upload">获取数据</button>
+    <button class="upload-btn" id="upload">确认并上传</button>
 
 <script src="scripts/checkToken.js"></script>
 <script src="scripts/globalUrl.js"></script>

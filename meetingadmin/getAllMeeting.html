@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="scripts/weui.min.css">
+    <link rel="stylesheet" href="scripts/jquery-weui.min.css">
     <style>
         body, html {
             width: 100%;
@@ -415,15 +417,17 @@
     <div class="alert-module-info-mask" ></div>
 </div>
 
+
+
 <script src="scripts/checkToken.js"></script>
 <script src="scripts/globalUrl.js"></script>
 <script src="scripts/jquery/jquery.min.js"></script>
+<script src="scripts/jquery-weui.min.js"></script>
 <script src="scripts/jquery/lrz.js"></script>
+
 <script>
     $( function () {
-
         var all = [ $("#title"),  $("#cost"), $("#start_time"), $("#end_time"), $("#deadline") ];
-
         var homepageBase64 = "";
         $( "#pic" ).change( function () {
 
@@ -511,28 +515,38 @@
                 return;
             }
 
-            $.ajax( {
-                url        : globalUrl.globalUrl + "admin/meetings/" + meetingId,
-                type       : "delete",
-                contentType: "application/json",
-                headers    : {
-                    "Authorization": window.sessionStorage.getItem( "token" )
-                },
-                success    : function ( msg ) {
+            $.confirm({
+                title: '标题',
+                text: '确认删除?',
+                onOK: function () {
 
-                    if ( msg[ "errno" ] !== "0" ) {
-                        alert( msg[ "errmsg" ] );
-                        return;
-                    }
+                    $.ajax( {
+                        url        : globalUrl.globalUrl + "admin/meetings/" + meetingId,
+                        type       : "delete",
+                        contentType: "application/json",
+                        headers    : {
+                            "Authorization": window.sessionStorage.getItem( "token" )
+                        },
+                        success    : function ( msg ) {
 
-                    alert( msg[ "errmsg" ] );
-                    //需要刷新一下页面
-                    window.location.href = "./getAllMeeting.html";
+                            if ( msg[ "errno" ] !== "0" ) {
+                                alert( msg[ "errmsg" ] );
+                                return;
+                            }
+
+                            alert( msg[ "errmsg" ] );
+                            //需要刷新一下页面
+                            window.location.href = "./getAllMeeting.html";
+                        },
+                        error      : function ( xhr, textstatus, thrown ) {
+                            alert( "无法连接服务器" );
+                        }
+                    } );
+
                 },
-                error      : function ( xhr, textstatus, thrown ) {
-                    alert( "无法连接服务器" );
+                onCancel: function () {
                 }
-            } );
+            });
 
         } );
 
@@ -655,7 +669,7 @@
                                 '            <div>\n' +
                                 '                <button class="change-module" data=' + moduleList[ i ][ "module_id" ] + '>修改</button>\n' +
                                 '                <button class="delete-module" data=' + moduleList[ i ][ "module_id" ] + '>删除</button>\n' +
-                                '                <a class="editor-module" target="_blank" href="./template.html?moduleId=' + moduleList[ i ][ "module_id" ] + '&meetingId='+meetingId+'" data=' + moduleList[ i ][ "module_id" ] + '>编辑</a>\n' +
+                                '                <a class="editor-module" style="text-align: center" target="_blank" href="./template.html?moduleId=' + moduleList[ i ][ "module_id" ] + '&meetingId='+meetingId+'" data=' + moduleList[ i ][ "module_id" ] + '>编辑</a>\n' +
                                 '            </div>\n' +
                                 '        </div>';
                         }
@@ -730,26 +744,37 @@
                 //删除该模块
                 $(".delete-module").click(function () {
                     let self = $(this);
-                    $.ajax({
-                        url: globalUrl.globalUrl + "admin/modules/" + self.attr("data"),
-                        method: "delete",
-                        contentType: "application/json",
-                        headers    : {
-                            "Authorization": window.sessionStorage.getItem( "token" )
-                        },
-                        success: function ( data ) {
-                            if( data["errno"] !== "0" ){
-                                alert( data["errmsg"] );
-                                return;
-                            }
-                            alert( data["errmsg"] );
-                            $(".alert-module-info").addClass( "hide" );
 
+                    $.confirm({
+                        title: '标题',
+                        text: '确认删除?',
+                        onOK: function () {
+                            $.ajax({
+                                url: globalUrl.globalUrl + "admin/modules/" + self.attr("data"),
+                                method: "delete",
+                                contentType: "application/json",
+                                headers    : {
+                                    "Authorization": window.sessionStorage.getItem( "token" )
+                                },
+                                success: function ( data ) {
+                                    if( data["errno"] !== "0" ){
+                                        alert( data["errmsg"] );
+                                        return;
+                                    }
+                                    alert( data["errmsg"] );
+                                    $(".alert-module-info").addClass( "hide" );
+
+                                },
+                                error: function (err) {
+                                    console.log( err );
+                                }
+                            })
                         },
-                        error: function (err) {
-                            console.log( err );
+                        onCancel: function () {
                         }
-                    })
+                    });
+
+
                 });
 
                 $(".numb").blur(function () {

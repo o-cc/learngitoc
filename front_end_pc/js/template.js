@@ -1,6 +1,8 @@
 $(function (){
 
     $("#homepage").attr("href", "./meetingHomePage.html?meetingId=" + loadPageVar("meetingId") );
+    $("#go_back").attr("href", "./meetingHomePage.html?meetingId=" + loadPageVar("meetingId") );
+    $("#attend").attr("href", "./serviceInfo.html?meetingId=" + loadPageVar("meetingId") );
 
     $.ajax({
         url: globalUrl.globalUrl + "modules/"+ loadPageVar("moduleId") + "/meetings/" + loadPageVar("meetingId"),
