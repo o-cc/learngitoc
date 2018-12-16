@@ -216,7 +216,7 @@ $( function () {
     $( "#image" ).change( function () {
 
         lrz( this.files[ 0 ], {
-            width: 300 //设置压缩参数
+            //width: 300 //设置压缩参数
         } ).then( function ( rst ) {
             /* 处理成功后执行 */
             $( ".header-img" ).attr( "src", rst.base64 );
