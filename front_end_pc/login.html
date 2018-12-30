@@ -21,7 +21,7 @@
 </header>
 
 <div class="login">
-    <div class="login-center">
+    <div class="login-center login-wrap">
         <div class="login-item login-title">个人用户登录</div>
         <div class="login-item login-ipt">
             <div class="weui-cell__bd">
@@ -41,9 +41,44 @@
         </div>
         <div class="login-item last-btns">
             <div> <a class="weui-btn weui-btn_primary register">新用户注册</a></div>
-            <!--<div> <a href="javascript:;" class="weui-btn weui-btn_default">忘记密码?</a></div>-->
+            <div> <a class="weui-btn weui-btn_default forget">忘记密码?</a></div>
         </div>
     </div>
+    <div class="login-center login-forget-phone hide">
+        <div class="login-item login-title">请输入手机号码验证</div>
+        <div class="login-item login-ipt">
+            <div class="weui-cell__bd">
+                <input class="weui-input login-input" id="phone" type="text" placeholder="请输入手机">
+            </div>
+        </div>
+        <div class="login-item login-ipt" style="margin-top: 1rem;display: flex;">
+            <div class="weui-cell__bd" style="flex: 1;">
+                <input id="check-num" class="weui-input login-input" type="text" placeholder="请输入验证码">
+            </div>
+            <div style="flex: 1;text-align: right">
+                <button class="get-check">获取验证码</button>
+            </div>
+        </div>
+
+    </div>
+    <div class="login-center login-forget hide" style="margin-top: 1rem;">
+        <div class="login-item login-ipt">
+            <div class="weui-cell__bd">
+                <input class="weui-input login-input" id="new-pwd" placeholder="请输入6位以上密码" type="password">
+            </div>
+        </div>
+        <div class="login-item login-ipt" style="margin-top: 1rem;display: flex;">
+            <div class="weui-cell__bd" style="flex: 1;">
+                <input id="confrim-pwd" class="weui-input login-input" placeholder="确认密码" type="password">
+            </div>
+        </div>
+        <p id="err-tip" style="color: red;display: none;">输入密码不一致</p>
+        <div class="login-item" style="margin-top: 1.5rem;">
+            <a id="submit-pwd" class="weui-btn weui-btn_default">确定</a>
+        </div>
+    </div>
+
+
 </div>
 
 <script src="js/jquery.min.js"></script>

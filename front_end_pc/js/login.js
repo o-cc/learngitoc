@@ -157,7 +157,148 @@ $(function () {
             }
         } )
 
+    });
+
+
+    $(".forget").click(function () {
+
+        //获取手机验证码
+        $(".login-forget-phone").removeClass("hide");
+        $(".login-wrap").addClass("hide");
+
+    });
+
+    $(".get-check").click( function () {
+        var self = $(this);
+        if( checkPhone($("#phone").val().trim()) ) {
+            $.alert("手机号码输入错误");
+            return;
+        }
+
+        self.attr("disabled", "disabled");
+        $.ajax({
+            url: globalUrl.globalUrl + "passwords/" + $("#phone").val().trim(),
+            method: "GET",
+            success: function ( res ){
+
+                if( res["errno"] !== "0" ) {
+                    $.alert( res["errmsg"] );
+                    self.removeAttr("disabled");
+                    return;
+                }
+
+                $(".login-forget").removeClass("hide");
+                //倒计时
+                self.attr("disabled", "disabled").css("background", "rgba(218, 218, 218, 0.34)").css("color","#666");
+                var timeout = 0;
+                var timer = setInterval(function () {
+
+                    timeout ++;
+                    if( timeout < 10 ){
+                        timeout = "0" + timeout;
+                    }
+                    self.html("( " + timeout + " ) s");
+                    Number( timeout );
+
+                    if( timeout> 30 ){
+                        clearInterval(timer);
+                        self.html("获取验证码");
+                        self.removeAttr("disabled").css("background", "#ff6700").css("color","#fff");
+                    }
+
+                },1000);
+
+            },
+            error: function (err) {
+                self.removeAttr("disabled");
+            }
+        })
+
+    });
+
+    $("#next").click(function () {
+        var self = $(this);
+
+        if( checkPhone($("#phone").val().trim()) || !$( "#check-num" ).val() ) {
+            $.alert("请输入正确信息");
+            return;
+        }
+
+
     })
+    //验证密码
+    $("#new-pwd").blur(function () {
+
+        if( checkPassword( $(this).val() ) ) {
+
+           $("#err-tip").html( checkPassword($(this).val()) ).show();
+
+        }else if ( $("#confrim-pwd").val() !== $("#new-pwd").val() ){
+
+            $("#err-tip").html("输入密码不一致");
+
+        }else {
+            $("#err-tip").hide()
+
+        }
+    });
+    //确认密码
+    $("#confrim-pwd").blur(function () {
+
+        if( checkPassword( $(this).val() ) ) {
+
+            $("#err-tip").html( checkPassword($(this).val()) ).show();
+
+        }else if ( $("#confrim-pwd").val() !== $("#new-pwd").val() ){
+
+            $("#err-tip").html("输入密码不一致");
+
+        }else {
+            $("#err-tip").hide()
+        }
+    });
+
+    $("#submit-pwd").click(function () {
+        if( !$("#confrim-pwd").val() || !$("#new-pwd").val()  ){
+
+            $.alert( "请输入密码" );
+            return;
+        }
+
+        $.ajax({
+            url: globalUrl.globalUrl + "passwords/" + $("#phone").val().trim(),
+            method     : "POST",
+            contentType: "application/json",
+            data       : JSON.stringify( {
+                    'sms_code': $("#check-num").val().trim(),
+                    'password': $("#new-pwd").val().trim()
+            } ),
+            success: function ( res ) {
+                if( res["errno"] !== "0" ){
+                    $.alert( res[ "errmsg" ] );
+                    return;
+                }
+
+                $.alert({
+                    title: '提示',
+                    text: res[ "errmsg" ],
+                    onOK: function () {
+                        window.location.href = "./login.html?meetingId=" + loadPageVar( "meetingId");
+
+                    }
+                });
+            },
+            error: function ( err ) {
+                console.log( err );
+                console.log( "链接服务器失败" );
+
+            }
+        })
+
+
+
+    })
+
 
 })
 

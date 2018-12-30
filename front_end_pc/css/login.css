@@ -85,6 +85,19 @@
     .hide {
         display: none;
     }
+
+    .flex {
+        display: flex;
+    }
+
+    .get-check {
+        width: 70%;
+        height: 100%;
+        color: #fff;
+        font-size: 1.5rem;
+        background-color: #ff6700;
+        border: none;
+    }
 }
 
 @media screen and (min-width: 768px) {
@@ -173,5 +186,9 @@
 
     .hide {
         display: none;
+    }
+
+    .flex {
+        display: flex;
     }
 }
